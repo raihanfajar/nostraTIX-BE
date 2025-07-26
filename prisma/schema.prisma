@@ -1,25 +1,221 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
-model Sample {
-  id        Int      @id @default(autoincrement())
-  name      String
-  code      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+// ============== ENUMS ==============
+enum Role {
+  USER
+  ADMIN
+}
 
-  @@map("samples") // if you want to use snake_case format
+enum Category {
+  MUSIC
+  ARTS
+  FOOD
+  BUSINESS
+  DATING
+}
+
+enum Status {
+  WAITING_PAYMENT
+  WAITING_FOR_CONFIRMATION
+  DONE
+  REJECTED
+  EXPIRED
+  CANCELLED
+}
+
+// ============== MODELS ==============
+
+model User {
+  id             String @id @default(uuid()) @db.Uuid
+  name           String
+  email          String @unique
+  password       String
+  profilePicture String @default("sample.jpg")
+  role           Role   @default(USER)
+  balancePoint   Int    @default(0)
+  referralCode   String @unique // Dibuat unique karena kode referral seharusnya tidak ada yang sama
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  reviews      Review[]
+  points       Point[]
+  transactions Transaction[]
+}
+
+model Organizer {
+  id             String @id @default(uuid()) @db.Uuid
+  name           String
+  email          String @unique
+  password       String
+  profilePicture String @default("sample.jpg")
+  ratings        Float  @default(0)
+  description    String @db.Text
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  events Event[]
+}
+
+model Review {
+  id      String  @id @default(uuid()) @db.Uuid
+  userId  String  @db.Uuid
+  eventId String? @db.Uuid
+  rating  Int
+  comment String  @db.Text
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  user  User   @relation(fields: [userId], references: [id])
+  event Event? @relation(fields: [eventId], references: [id])
+}
+
+model Point {
+  id          Int       @id @default(autoincrement())
+  userId      String    @db.Uuid
+  expiredDate DateTime? // !pakai date-fns +3 month FNS
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Event {
+  id          String   @id @default(uuid()) @db.Uuid
+  organizerId String   @db.Uuid
+  name        String
+  description String   @db.Text
+  category    Category
+  location    String
+  startDate   DateTime
+  endDate     DateTime
+  totalRating Float    @default(0)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  organizer        Organizer             @relation(fields: [organizerId], references: [id])
+  reviews          Review[]
+  pictures         EventPicture[]
+  ticketCategories TicketEventCategory[]
+  transactions     Transaction[]
+  vouchers         Voucher[]
+  tickets          Ticket[]
+}
+
+model EventPicture {
+  id       String  @id @default(uuid()) @db.Uuid
+  eventId  String  @db.Uuid
+  banner   String
+  picture1 String
+  picture2 String?
+  picture3 String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  event Event @relation(fields: [eventId], references: [id])
+}
+
+model TicketEventCategory {
+  id          Int    @id @default(autoincrement())
+  eventId     String @db.Uuid
+  name        String
+  description String @db.Text
+  price       Int    @default(0)
+  seatQuota   Int
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  event   Event    @relation(fields: [eventId], references: [id])
+  tickets Ticket[]
+}
+
+model Transaction {
+  id           String  @id @default(uuid()) @db.Uuid
+  eventId      String  @db.Uuid
+  userId       String  @db.Uuid
+  voucherCode  String?
+  couponCode   String?
+  paymentProof String?
+  status       Status  @default(WAITING_PAYMENT)
+  quantity     Int
+  totalPrice   Int     @default(0)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  event   Event    @relation(fields: [eventId], references: [id])
+  user    User     @relation(fields: [userId], references: [id])
+  voucher Voucher? @relation(fields: [voucherCode], references: [code])
+  coupon  Coupon?  @relation(fields: [couponCode], references: [code])
+  tickets Ticket[]
+}
+
+model Ticket {
+  id              String   @id @default(uuid()) @db.Uuid
+  eventId         String   @db.Uuid
+  transactionId   String   @db.Uuid
+  eventCategoryId Int
+  eventName       String
+  nameCategory    String
+  eventDate       DateTime
+  qrCode          String   @default("qrcode.jpg")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  event       Event               @relation(fields: [eventId], references: [id])
+  transaction Transaction         @relation(fields: [transactionId], references: [id])
+  category    TicketEventCategory @relation(fields: [eventCategoryId], references: [id])
+}
+
+model Voucher {
+  code        String   @id @unique
+  eventId     String   @db.Uuid
+  discount    Int
+  quota       Int
+  expiredDate DateTime
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  event        Event         @relation(fields: [eventId], references: [id])
+  transactions Transaction[]
+}
+
+model Coupon {
+  code        String   @id @unique
+  discount    Int
+  quota       Int
+  expiredDate DateTime
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  transactions Transaction[]
 }

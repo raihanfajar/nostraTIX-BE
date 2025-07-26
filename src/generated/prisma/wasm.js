@@ -20,12 +20,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.7.0
- * Query Engine version: 3cff47a7f5d65c3ea74883f1d736e41d68ce91ed
+ * Prisma Client JS version: 6.12.0
+ * Query Engine version: 8047c96bbd92db98a2abc7c9323ce77c02c89dbc
  */
 Prisma.prismaVersion = {
-  client: "6.7.0",
-  engine: "3cff47a7f5d65c3ea74883f1d736e41d68ce91ed"
+  client: "6.12.0",
+  engine: "8047c96bbd92db98a2abc7c9323ce77c02c89dbc"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -120,12 +120,140 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.SampleScalarFieldEnum = {
+exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  code: 'code',
+  email: 'email',
+  password: 'password',
+  profilePicture: 'profilePicture',
+  role: 'role',
+  balancePoint: 'balancePoint',
+  referralCode: 'referralCode',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.OrganizerScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  password: 'password',
+  profilePicture: 'profilePicture',
+  ratings: 'ratings',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.ReviewScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  eventId: 'eventId',
+  rating: 'rating',
+  comment: 'comment',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.PointScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  expiredDate: 'expiredDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.EventScalarFieldEnum = {
+  id: 'id',
+  organizerId: 'organizerId',
+  name: 'name',
+  description: 'description',
+  category: 'category',
+  location: 'location',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  totalRating: 'totalRating',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.EventPictureScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  banner: 'banner',
+  picture1: 'picture1',
+  picture2: 'picture2',
+  picture3: 'picture3',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.TicketEventCategoryScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  name: 'name',
+  description: 'description',
+  price: 'price',
+  seatQuota: 'seatQuota',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.TransactionScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  userId: 'userId',
+  voucherCode: 'voucherCode',
+  couponCode: 'couponCode',
+  paymentProof: 'paymentProof',
+  status: 'status',
+  quantity: 'quantity',
+  totalPrice: 'totalPrice',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.TicketScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  transactionId: 'transactionId',
+  eventCategoryId: 'eventCategoryId',
+  eventName: 'eventName',
+  nameCategory: 'nameCategory',
+  eventDate: 'eventDate',
+  qrCode: 'qrCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.VoucherScalarFieldEnum = {
+  code: 'code',
+  eventId: 'eventId',
+  discount: 'discount',
+  quota: 'quota',
+  expiredDate: 'expiredDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.CouponScalarFieldEnum = {
+  code: 'code',
+  discount: 'discount',
+  quota: 'quota',
+  expiredDate: 'expiredDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -133,14 +261,49 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.SampleOrderByRelevanceFieldEnum = {
-  name: 'name',
-  code: 'code'
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+exports.Role = exports.$Enums.Role = {
+  USER: 'USER',
+  ADMIN: 'ADMIN'
+};
+
+exports.Category = exports.$Enums.Category = {
+  MUSIC: 'MUSIC',
+  ARTS: 'ARTS',
+  FOOD: 'FOOD',
+  BUSINESS: 'BUSINESS',
+  DATING: 'DATING'
+};
+
+exports.Status = exports.$Enums.Status = {
+  WAITING_PAYMENT: 'WAITING_PAYMENT',
+  WAITING_FOR_CONFIRMATION: 'WAITING_FOR_CONFIRMATION',
+  DONE: 'DONE',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  CANCELLED: 'CANCELLED'
+};
 
 exports.Prisma.ModelName = {
-  Sample: 'Sample'
+  User: 'User',
+  Organizer: 'Organizer',
+  Review: 'Review',
+  Point: 'Point',
+  Event: 'Event',
+  EventPicture: 'EventPicture',
+  TicketEventCategory: 'TicketEventCategory',
+  Transaction: 'Transaction',
+  Ticket: 'Ticket',
+  Voucher: 'Voucher',
+  Coupon: 'Coupon'
 };
 
 /**
