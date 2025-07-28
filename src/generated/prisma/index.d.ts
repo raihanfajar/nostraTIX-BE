@@ -3366,6 +3366,7 @@ export namespace Prisma {
 
   export type OrganizerMinAggregateOutputType = {
     id: string | null
+    slug: string | null
     name: string | null
     email: string | null
     password: string | null
@@ -3379,6 +3380,7 @@ export namespace Prisma {
 
   export type OrganizerMaxAggregateOutputType = {
     id: string | null
+    slug: string | null
     name: string | null
     email: string | null
     password: string | null
@@ -3392,6 +3394,7 @@ export namespace Prisma {
 
   export type OrganizerCountAggregateOutputType = {
     id: number
+    slug: number
     name: number
     email: number
     password: number
@@ -3415,6 +3418,7 @@ export namespace Prisma {
 
   export type OrganizerMinAggregateInputType = {
     id?: true
+    slug?: true
     name?: true
     email?: true
     password?: true
@@ -3428,6 +3432,7 @@ export namespace Prisma {
 
   export type OrganizerMaxAggregateInputType = {
     id?: true
+    slug?: true
     name?: true
     email?: true
     password?: true
@@ -3441,6 +3446,7 @@ export namespace Prisma {
 
   export type OrganizerCountAggregateInputType = {
     id?: true
+    slug?: true
     name?: true
     email?: true
     password?: true
@@ -3541,6 +3547,7 @@ export namespace Prisma {
 
   export type OrganizerGroupByOutputType = {
     id: string
+    slug: string
     name: string
     email: string
     password: string
@@ -3573,6 +3580,7 @@ export namespace Prisma {
 
   export type OrganizerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    slug?: boolean
     name?: boolean
     email?: boolean
     password?: boolean
@@ -3588,6 +3596,7 @@ export namespace Prisma {
 
   export type OrganizerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    slug?: boolean
     name?: boolean
     email?: boolean
     password?: boolean
@@ -3601,6 +3610,7 @@ export namespace Prisma {
 
   export type OrganizerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    slug?: boolean
     name?: boolean
     email?: boolean
     password?: boolean
@@ -3614,6 +3624,7 @@ export namespace Prisma {
 
   export type OrganizerSelectScalar = {
     id?: boolean
+    slug?: boolean
     name?: boolean
     email?: boolean
     password?: boolean
@@ -3625,7 +3636,7 @@ export namespace Prisma {
     deletedAt?: boolean
   }
 
-  export type OrganizerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "profilePicture" | "ratings" | "description" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["organizer"]>
+  export type OrganizerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "name" | "email" | "password" | "profilePicture" | "ratings" | "description" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["organizer"]>
   export type OrganizerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     events?: boolean | Organizer$eventsArgs<ExtArgs>
     _count?: boolean | OrganizerCountOutputTypeDefaultArgs<ExtArgs>
@@ -3640,6 +3651,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      slug: string
       name: string
       email: string
       password: string
@@ -4074,6 +4086,7 @@ export namespace Prisma {
    */
   interface OrganizerFieldRefs {
     readonly id: FieldRef<"Organizer", 'String'>
+    readonly slug: FieldRef<"Organizer", 'String'>
     readonly name: FieldRef<"Organizer", 'String'>
     readonly email: FieldRef<"Organizer", 'String'>
     readonly password: FieldRef<"Organizer", 'String'>
@@ -6800,6 +6813,7 @@ export namespace Prisma {
     id: string | null
     organizerId: string | null
     name: string | null
+    slug: string | null
     description: string | null
     category: $Enums.Category | null
     location: string | null
@@ -6815,6 +6829,7 @@ export namespace Prisma {
     id: string | null
     organizerId: string | null
     name: string | null
+    slug: string | null
     description: string | null
     category: $Enums.Category | null
     location: string | null
@@ -6830,6 +6845,7 @@ export namespace Prisma {
     id: number
     organizerId: number
     name: number
+    slug: number
     description: number
     category: number
     location: number
@@ -6855,6 +6871,7 @@ export namespace Prisma {
     id?: true
     organizerId?: true
     name?: true
+    slug?: true
     description?: true
     category?: true
     location?: true
@@ -6870,6 +6887,7 @@ export namespace Prisma {
     id?: true
     organizerId?: true
     name?: true
+    slug?: true
     description?: true
     category?: true
     location?: true
@@ -6885,6 +6903,7 @@ export namespace Prisma {
     id?: true
     organizerId?: true
     name?: true
+    slug?: true
     description?: true
     category?: true
     location?: true
@@ -6987,6 +7006,7 @@ export namespace Prisma {
     id: string
     organizerId: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -7021,6 +7041,7 @@ export namespace Prisma {
     id?: boolean
     organizerId?: boolean
     name?: boolean
+    slug?: boolean
     description?: boolean
     category?: boolean
     location?: boolean
@@ -7044,6 +7065,7 @@ export namespace Prisma {
     id?: boolean
     organizerId?: boolean
     name?: boolean
+    slug?: boolean
     description?: boolean
     category?: boolean
     location?: boolean
@@ -7060,6 +7082,7 @@ export namespace Prisma {
     id?: boolean
     organizerId?: boolean
     name?: boolean
+    slug?: boolean
     description?: boolean
     category?: boolean
     location?: boolean
@@ -7076,6 +7099,7 @@ export namespace Prisma {
     id?: boolean
     organizerId?: boolean
     name?: boolean
+    slug?: boolean
     description?: boolean
     category?: boolean
     location?: boolean
@@ -7087,7 +7111,7 @@ export namespace Prisma {
     deletedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizerId" | "name" | "description" | "category" | "location" | "startDate" | "endDate" | "totalRating" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizerId" | "name" | "slug" | "description" | "category" | "location" | "startDate" | "endDate" | "totalRating" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organizer?: boolean | OrganizerDefaultArgs<ExtArgs>
     reviews?: boolean | Event$reviewsArgs<ExtArgs>
@@ -7120,6 +7144,7 @@ export namespace Prisma {
       id: string
       organizerId: string
       name: string
+      slug: string
       description: string
       category: $Enums.Category
       location: string
@@ -7562,6 +7587,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Event", 'String'>
     readonly organizerId: FieldRef<"Event", 'String'>
     readonly name: FieldRef<"Event", 'String'>
+    readonly slug: FieldRef<"Event", 'String'>
     readonly description: FieldRef<"Event", 'String'>
     readonly category: FieldRef<"Event", 'Category'>
     readonly location: FieldRef<"Event", 'String'>
@@ -15218,6 +15244,7 @@ export namespace Prisma {
 
   export const OrganizerScalarFieldEnum: {
     id: 'id',
+    slug: 'slug',
     name: 'name',
     email: 'email',
     password: 'password',
@@ -15262,6 +15289,7 @@ export namespace Prisma {
     id: 'id',
     organizerId: 'organizerId',
     name: 'name',
+    slug: 'slug',
     description: 'description',
     category: 'category',
     location: 'location',
@@ -15596,6 +15624,7 @@ export namespace Prisma {
     OR?: OrganizerWhereInput[]
     NOT?: OrganizerWhereInput | OrganizerWhereInput[]
     id?: UuidFilter<"Organizer"> | string
+    slug?: StringFilter<"Organizer"> | string
     name?: StringFilter<"Organizer"> | string
     email?: StringFilter<"Organizer"> | string
     password?: StringFilter<"Organizer"> | string
@@ -15610,6 +15639,7 @@ export namespace Prisma {
 
   export type OrganizerOrderByWithRelationInput = {
     id?: SortOrder
+    slug?: SortOrder
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
@@ -15624,6 +15654,7 @@ export namespace Prisma {
 
   export type OrganizerWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    slug?: string
     email?: string
     AND?: OrganizerWhereInput | OrganizerWhereInput[]
     OR?: OrganizerWhereInput[]
@@ -15637,10 +15668,11 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Organizer"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Organizer"> | Date | string | null
     events?: EventListRelationFilter
-  }, "id" | "email">
+  }, "id" | "slug" | "email">
 
   export type OrganizerOrderByWithAggregationInput = {
     id?: SortOrder
+    slug?: SortOrder
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
@@ -15662,6 +15694,7 @@ export namespace Prisma {
     OR?: OrganizerScalarWhereWithAggregatesInput[]
     NOT?: OrganizerScalarWhereWithAggregatesInput | OrganizerScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Organizer"> | string
+    slug?: StringWithAggregatesFilter<"Organizer"> | string
     name?: StringWithAggregatesFilter<"Organizer"> | string
     email?: StringWithAggregatesFilter<"Organizer"> | string
     password?: StringWithAggregatesFilter<"Organizer"> | string
@@ -15817,6 +15850,7 @@ export namespace Prisma {
     id?: UuidFilter<"Event"> | string
     organizerId?: UuidFilter<"Event"> | string
     name?: StringFilter<"Event"> | string
+    slug?: StringFilter<"Event"> | string
     description?: StringFilter<"Event"> | string
     category?: EnumCategoryFilter<"Event"> | $Enums.Category
     location?: StringFilter<"Event"> | string
@@ -15839,6 +15873,7 @@ export namespace Prisma {
     id?: SortOrder
     organizerId?: SortOrder
     name?: SortOrder
+    slug?: SortOrder
     description?: SortOrder
     category?: SortOrder
     location?: SortOrder
@@ -15859,6 +15894,7 @@ export namespace Prisma {
 
   export type EventWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    slug?: string
     AND?: EventWhereInput | EventWhereInput[]
     OR?: EventWhereInput[]
     NOT?: EventWhereInput | EventWhereInput[]
@@ -15880,12 +15916,13 @@ export namespace Prisma {
     transactions?: TransactionListRelationFilter
     vouchers?: VoucherListRelationFilter
     tickets?: TicketListRelationFilter
-  }, "id">
+  }, "id" | "slug">
 
   export type EventOrderByWithAggregationInput = {
     id?: SortOrder
     organizerId?: SortOrder
     name?: SortOrder
+    slug?: SortOrder
     description?: SortOrder
     category?: SortOrder
     location?: SortOrder
@@ -15909,6 +15946,7 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"Event"> | string
     organizerId?: UuidWithAggregatesFilter<"Event"> | string
     name?: StringWithAggregatesFilter<"Event"> | string
+    slug?: StringWithAggregatesFilter<"Event"> | string
     description?: StringWithAggregatesFilter<"Event"> | string
     category?: EnumCategoryWithAggregatesFilter<"Event"> | $Enums.Category
     location?: StringWithAggregatesFilter<"Event"> | string
@@ -16526,6 +16564,7 @@ export namespace Prisma {
 
   export type OrganizerCreateInput = {
     id?: string
+    slug: string
     name: string
     email: string
     password: string
@@ -16540,6 +16579,7 @@ export namespace Prisma {
 
   export type OrganizerUncheckedCreateInput = {
     id?: string
+    slug: string
     name: string
     email: string
     password: string
@@ -16554,6 +16594,7 @@ export namespace Prisma {
 
   export type OrganizerUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
@@ -16568,6 +16609,7 @@ export namespace Prisma {
 
   export type OrganizerUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
@@ -16582,6 +16624,7 @@ export namespace Prisma {
 
   export type OrganizerCreateManyInput = {
     id?: string
+    slug: string
     name: string
     email: string
     password: string
@@ -16595,6 +16638,7 @@ export namespace Prisma {
 
   export type OrganizerUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
@@ -16608,6 +16652,7 @@ export namespace Prisma {
 
   export type OrganizerUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
@@ -16756,6 +16801,7 @@ export namespace Prisma {
   export type EventCreateInput = {
     id?: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -16778,6 +16824,7 @@ export namespace Prisma {
     id?: string
     organizerId: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -16798,6 +16845,7 @@ export namespace Prisma {
   export type EventUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -16820,6 +16868,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     organizerId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -16841,6 +16890,7 @@ export namespace Prisma {
     id?: string
     organizerId: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -16855,6 +16905,7 @@ export namespace Prisma {
   export type EventUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -16870,6 +16921,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     organizerId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -17664,6 +17716,7 @@ export namespace Prisma {
 
   export type OrganizerCountOrderByAggregateInput = {
     id?: SortOrder
+    slug?: SortOrder
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
@@ -17681,6 +17734,7 @@ export namespace Prisma {
 
   export type OrganizerMaxOrderByAggregateInput = {
     id?: SortOrder
+    slug?: SortOrder
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
@@ -17694,6 +17748,7 @@ export namespace Prisma {
 
   export type OrganizerMinOrderByAggregateInput = {
     id?: SortOrder
+    slug?: SortOrder
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
@@ -17894,6 +17949,7 @@ export namespace Prisma {
     id?: SortOrder
     organizerId?: SortOrder
     name?: SortOrder
+    slug?: SortOrder
     description?: SortOrder
     category?: SortOrder
     location?: SortOrder
@@ -17913,6 +17969,7 @@ export namespace Prisma {
     id?: SortOrder
     organizerId?: SortOrder
     name?: SortOrder
+    slug?: SortOrder
     description?: SortOrder
     category?: SortOrder
     location?: SortOrder
@@ -17928,6 +17985,7 @@ export namespace Prisma {
     id?: SortOrder
     organizerId?: SortOrder
     name?: SortOrder
+    slug?: SortOrder
     description?: SortOrder
     category?: SortOrder
     location?: SortOrder
@@ -19602,6 +19660,7 @@ export namespace Prisma {
   export type EventCreateWithoutOrganizerInput = {
     id?: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -19622,6 +19681,7 @@ export namespace Prisma {
   export type EventUncheckedCreateWithoutOrganizerInput = {
     id?: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -19672,6 +19732,7 @@ export namespace Prisma {
     id?: UuidFilter<"Event"> | string
     organizerId?: UuidFilter<"Event"> | string
     name?: StringFilter<"Event"> | string
+    slug?: StringFilter<"Event"> | string
     description?: StringFilter<"Event"> | string
     category?: EnumCategoryFilter<"Event"> | $Enums.Category
     location?: StringFilter<"Event"> | string
@@ -19723,6 +19784,7 @@ export namespace Prisma {
   export type EventCreateWithoutReviewsInput = {
     id?: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -19744,6 +19806,7 @@ export namespace Prisma {
     id?: string
     organizerId: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -19822,6 +19885,7 @@ export namespace Prisma {
   export type EventUpdateWithoutReviewsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -19843,6 +19907,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     organizerId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -19941,6 +20006,7 @@ export namespace Prisma {
 
   export type OrganizerCreateWithoutEventsInput = {
     id?: string
+    slug: string
     name: string
     email: string
     password: string
@@ -19954,6 +20020,7 @@ export namespace Prisma {
 
   export type OrganizerUncheckedCreateWithoutEventsInput = {
     id?: string
+    slug: string
     name: string
     email: string
     password: string
@@ -20186,6 +20253,7 @@ export namespace Prisma {
 
   export type OrganizerUpdateWithoutEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
@@ -20199,6 +20267,7 @@ export namespace Prisma {
 
   export type OrganizerUncheckedUpdateWithoutEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
@@ -20370,6 +20439,7 @@ export namespace Prisma {
   export type EventCreateWithoutPicturesInput = {
     id?: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -20391,6 +20461,7 @@ export namespace Prisma {
     id?: string
     organizerId: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -20426,6 +20497,7 @@ export namespace Prisma {
   export type EventUpdateWithoutPicturesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -20447,6 +20519,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     organizerId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -20466,6 +20539,7 @@ export namespace Prisma {
   export type EventCreateWithoutTicketCategoriesInput = {
     id?: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -20487,6 +20561,7 @@ export namespace Prisma {
     id?: string
     organizerId: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -20558,6 +20633,7 @@ export namespace Prisma {
   export type EventUpdateWithoutTicketCategoriesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -20579,6 +20655,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     organizerId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -20614,6 +20691,7 @@ export namespace Prisma {
   export type EventCreateWithoutTransactionsInput = {
     id?: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -20635,6 +20713,7 @@ export namespace Prisma {
     id?: string
     organizerId: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -20795,6 +20874,7 @@ export namespace Prisma {
   export type EventUpdateWithoutTransactionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -20816,6 +20896,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     organizerId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -20958,6 +21039,7 @@ export namespace Prisma {
   export type EventCreateWithoutTicketsInput = {
     id?: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -20979,6 +21061,7 @@ export namespace Prisma {
     id?: string
     organizerId: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -21077,6 +21160,7 @@ export namespace Prisma {
   export type EventUpdateWithoutTicketsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -21098,6 +21182,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     organizerId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -21192,6 +21277,7 @@ export namespace Prisma {
   export type EventCreateWithoutVouchersInput = {
     id?: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -21213,6 +21299,7 @@ export namespace Prisma {
     id?: string
     organizerId: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -21288,6 +21375,7 @@ export namespace Prisma {
   export type EventUpdateWithoutVouchersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -21309,6 +21397,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     organizerId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -21529,6 +21618,7 @@ export namespace Prisma {
   export type EventCreateManyOrganizerInput = {
     id?: string
     name: string
+    slug: string
     description: string
     category: $Enums.Category
     location: string
@@ -21543,6 +21633,7 @@ export namespace Prisma {
   export type EventUpdateWithoutOrganizerInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -21563,6 +21654,7 @@ export namespace Prisma {
   export type EventUncheckedUpdateWithoutOrganizerInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string
@@ -21583,6 +21675,7 @@ export namespace Prisma {
   export type EventUncheckedUpdateManyWithoutOrganizerInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     location?: StringFieldUpdateOperationsInput | string

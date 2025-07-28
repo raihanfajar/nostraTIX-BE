@@ -136,6 +136,7 @@ exports.Prisma.UserScalarFieldEnum = {
 
 exports.Prisma.OrganizerScalarFieldEnum = {
   id: 'id',
+  slug: 'slug',
   name: 'name',
   email: 'email',
   password: 'password',
@@ -171,6 +172,7 @@ exports.Prisma.EventScalarFieldEnum = {
   id: 'id',
   organizerId: 'organizerId',
   name: 'name',
+  slug: 'slug',
   description: 'description',
   category: 'category',
   location: 'location',
