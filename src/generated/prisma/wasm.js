@@ -143,6 +143,7 @@ exports.Prisma.OrganizerScalarFieldEnum = {
   profilePicture: 'profilePicture',
   ratings: 'ratings',
   description: 'description',
+  isActivated: 'isActivated',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'

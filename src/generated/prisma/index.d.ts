@@ -3373,6 +3373,7 @@ export namespace Prisma {
     profilePicture: string | null
     ratings: number | null
     description: string | null
+    isActivated: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     deletedAt: Date | null
@@ -3387,6 +3388,7 @@ export namespace Prisma {
     profilePicture: string | null
     ratings: number | null
     description: string | null
+    isActivated: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     deletedAt: Date | null
@@ -3401,6 +3403,7 @@ export namespace Prisma {
     profilePicture: number
     ratings: number
     description: number
+    isActivated: number
     createdAt: number
     updatedAt: number
     deletedAt: number
@@ -3425,6 +3428,7 @@ export namespace Prisma {
     profilePicture?: true
     ratings?: true
     description?: true
+    isActivated?: true
     createdAt?: true
     updatedAt?: true
     deletedAt?: true
@@ -3439,6 +3443,7 @@ export namespace Prisma {
     profilePicture?: true
     ratings?: true
     description?: true
+    isActivated?: true
     createdAt?: true
     updatedAt?: true
     deletedAt?: true
@@ -3453,6 +3458,7 @@ export namespace Prisma {
     profilePicture?: true
     ratings?: true
     description?: true
+    isActivated?: true
     createdAt?: true
     updatedAt?: true
     deletedAt?: true
@@ -3554,6 +3560,7 @@ export namespace Prisma {
     profilePicture: string
     ratings: number
     description: string
+    isActivated: boolean
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
@@ -3587,6 +3594,7 @@ export namespace Prisma {
     profilePicture?: boolean
     ratings?: boolean
     description?: boolean
+    isActivated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
@@ -3603,6 +3611,7 @@ export namespace Prisma {
     profilePicture?: boolean
     ratings?: boolean
     description?: boolean
+    isActivated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
@@ -3617,6 +3626,7 @@ export namespace Prisma {
     profilePicture?: boolean
     ratings?: boolean
     description?: boolean
+    isActivated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
@@ -3631,12 +3641,13 @@ export namespace Prisma {
     profilePicture?: boolean
     ratings?: boolean
     description?: boolean
+    isActivated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
   }
 
-  export type OrganizerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "name" | "email" | "password" | "profilePicture" | "ratings" | "description" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["organizer"]>
+  export type OrganizerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "name" | "email" | "password" | "profilePicture" | "ratings" | "description" | "isActivated" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["organizer"]>
   export type OrganizerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     events?: boolean | Organizer$eventsArgs<ExtArgs>
     _count?: boolean | OrganizerCountOutputTypeDefaultArgs<ExtArgs>
@@ -3658,6 +3669,7 @@ export namespace Prisma {
       profilePicture: string
       ratings: number
       description: string
+      isActivated: boolean
       createdAt: Date
       updatedAt: Date
       deletedAt: Date | null
@@ -4093,6 +4105,7 @@ export namespace Prisma {
     readonly profilePicture: FieldRef<"Organizer", 'String'>
     readonly ratings: FieldRef<"Organizer", 'Float'>
     readonly description: FieldRef<"Organizer", 'String'>
+    readonly isActivated: FieldRef<"Organizer", 'Boolean'>
     readonly createdAt: FieldRef<"Organizer", 'DateTime'>
     readonly updatedAt: FieldRef<"Organizer", 'DateTime'>
     readonly deletedAt: FieldRef<"Organizer", 'DateTime'>
@@ -15251,6 +15264,7 @@ export namespace Prisma {
     profilePicture: 'profilePicture',
     ratings: 'ratings',
     description: 'description',
+    isActivated: 'isActivated',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     deletedAt: 'deletedAt'
@@ -15496,6 +15510,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Category'
    */
   export type EnumCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Category'>
@@ -15631,6 +15652,7 @@ export namespace Prisma {
     profilePicture?: StringFilter<"Organizer"> | string
     ratings?: FloatFilter<"Organizer"> | number
     description?: StringFilter<"Organizer"> | string
+    isActivated?: BoolFilter<"Organizer"> | boolean
     createdAt?: DateTimeFilter<"Organizer"> | Date | string
     updatedAt?: DateTimeFilter<"Organizer"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Organizer"> | Date | string | null
@@ -15646,6 +15668,7 @@ export namespace Prisma {
     profilePicture?: SortOrder
     ratings?: SortOrder
     description?: SortOrder
+    isActivated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
@@ -15664,6 +15687,7 @@ export namespace Prisma {
     profilePicture?: StringFilter<"Organizer"> | string
     ratings?: FloatFilter<"Organizer"> | number
     description?: StringFilter<"Organizer"> | string
+    isActivated?: BoolFilter<"Organizer"> | boolean
     createdAt?: DateTimeFilter<"Organizer"> | Date | string
     updatedAt?: DateTimeFilter<"Organizer"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Organizer"> | Date | string | null
@@ -15679,6 +15703,7 @@ export namespace Prisma {
     profilePicture?: SortOrder
     ratings?: SortOrder
     description?: SortOrder
+    isActivated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
@@ -15701,6 +15726,7 @@ export namespace Prisma {
     profilePicture?: StringWithAggregatesFilter<"Organizer"> | string
     ratings?: FloatWithAggregatesFilter<"Organizer"> | number
     description?: StringWithAggregatesFilter<"Organizer"> | string
+    isActivated?: BoolWithAggregatesFilter<"Organizer"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Organizer"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Organizer"> | Date | string
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Organizer"> | Date | string | null
@@ -16571,6 +16597,7 @@ export namespace Prisma {
     profilePicture?: string
     ratings?: number
     description: string
+    isActivated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -16586,6 +16613,7 @@ export namespace Prisma {
     profilePicture?: string
     ratings?: number
     description: string
+    isActivated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -16601,6 +16629,7 @@ export namespace Prisma {
     profilePicture?: StringFieldUpdateOperationsInput | string
     ratings?: FloatFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
+    isActivated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -16616,6 +16645,7 @@ export namespace Prisma {
     profilePicture?: StringFieldUpdateOperationsInput | string
     ratings?: FloatFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
+    isActivated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -16631,6 +16661,7 @@ export namespace Prisma {
     profilePicture?: string
     ratings?: number
     description: string
+    isActivated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -16645,6 +16676,7 @@ export namespace Prisma {
     profilePicture?: StringFieldUpdateOperationsInput | string
     ratings?: FloatFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
+    isActivated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -16659,6 +16691,7 @@ export namespace Prisma {
     profilePicture?: StringFieldUpdateOperationsInput | string
     ratings?: FloatFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
+    isActivated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17704,6 +17737,11 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type EventListRelationFilter = {
     every?: EventWhereInput
     some?: EventWhereInput
@@ -17723,6 +17761,7 @@ export namespace Prisma {
     profilePicture?: SortOrder
     ratings?: SortOrder
     description?: SortOrder
+    isActivated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrder
@@ -17741,6 +17780,7 @@ export namespace Prisma {
     profilePicture?: SortOrder
     ratings?: SortOrder
     description?: SortOrder
+    isActivated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrder
@@ -17755,6 +17795,7 @@ export namespace Prisma {
     profilePicture?: SortOrder
     ratings?: SortOrder
     description?: SortOrder
+    isActivated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrder
@@ -17778,6 +17819,14 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type UuidNullableFilter<$PrismaModel = never> = {
@@ -18528,6 +18577,10 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type EventUpdateManyWithoutOrganizerNestedInput = {
@@ -19364,6 +19417,11 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -19378,6 +19436,14 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedUuidNullableFilter<$PrismaModel = never> = {
@@ -20013,6 +20079,7 @@ export namespace Prisma {
     profilePicture?: string
     ratings?: number
     description: string
+    isActivated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -20027,6 +20094,7 @@ export namespace Prisma {
     profilePicture?: string
     ratings?: number
     description: string
+    isActivated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -20260,6 +20328,7 @@ export namespace Prisma {
     profilePicture?: StringFieldUpdateOperationsInput | string
     ratings?: FloatFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
+    isActivated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20274,6 +20343,7 @@ export namespace Prisma {
     profilePicture?: StringFieldUpdateOperationsInput | string
     ratings?: FloatFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
+    isActivated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
