@@ -15,7 +15,7 @@ export const registerUserService = async (body: Pick<User, 'name' | 'email' | 'p
     const maxAttempts = 5;
     do {
         if (attempts >= maxAttempts) throw new ApiError(500, "Failed to generate unique referral code", false);
-        generatedReferralCode = generateReferralCode();
+        generatedReferralCode = await generateReferralCode();
         const existing = await prisma.user.findUnique({ where: { referralCode: generatedReferralCode } });
         if (!existing) break;
         attempts++;
