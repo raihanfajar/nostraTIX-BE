@@ -1,8 +1,17 @@
-import App from './app';
+import express from "express";
+import { ApiErrorHandler } from "./middlewares/ApiErrorHandler";
+import mainRouter from "./routers/index.route";
 
-const main = () => {
-  const app = new App();
-  app.start();
-};
+const PORT = process.env.PORT || 8000;
 
-main();
+const app = express();
+
+app.use(mainRouter); // !Main Router
+
+app.use(express.json()); // !Middleware to parse incoming requests with JSON payloads
+
+app.use(ApiErrorHandler); // !Custom Error Handler Middleware
+
+app.listen(PORT, () => {
+  console.log(`  ➜ [API] Server runs on port ${PORT}:   http://localhost:${PORT}/`);
+});
