@@ -51,6 +51,7 @@ model User {
   reviews      Review[]
   points       Point[]
   transactions Transaction[]
+  Coupon       Coupon[]
 }
 
 model Organizer {
@@ -200,6 +201,7 @@ model Voucher {
   eventId     String   @db.Uuid
   discount    Int
   quota       Int
+  maxDiscount Int
   expiredDate DateTime
 
   createdAt DateTime  @default(now())
@@ -214,11 +216,14 @@ model Coupon {
   code        String   @id @unique
   discount    Int
   quota       Int
+  onlyForId   String?  @db.Uuid
+  maxDiscount Int
   expiredDate DateTime
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
+  user         User?         @relation(fields: [onlyForId], references: [id])
   transactions Transaction[]
 }
