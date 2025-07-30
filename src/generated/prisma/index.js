@@ -292,7 +292,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\user mosdef\\Desktop\\Purwadhika\\miniProject\\nostraTIX-BE\\src\\generated\\prisma",
+      "value": "C:\\Purwadhika\\MiniProject\\nostraTIX-BE\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -306,7 +306,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\user mosdef\\Desktop\\Purwadhika\\miniProject\\nostraTIX-BE\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Purwadhika\\MiniProject\\nostraTIX-BE\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -320,6 +320,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
