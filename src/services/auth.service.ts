@@ -1,42 +1,78 @@
+import dayjs from "dayjs";
 import prisma from "../config";
 import { Organizer, User } from "../generated/prisma";
 import { comparePassword, hashPassword } from "../lib/bcrypt";
 import { generateToken } from "../lib/jwt";
 import { ApiError } from "../utils/ApiError";
+import { generateCouponCode } from "../utils/generateCouponCode";
 import { generateReferralCode } from "../utils/generateReferralCode";
 import { generateUniqueSlug } from "../utils/generateSlug";
 
-export const registerUserService = async (body: Pick<User, 'name' | 'email' | 'password'>) => {
-    // *Setup
+export const registerUserService = async (
+    body: Pick<User, 'name' | 'email' | 'password'>,
+    referralCode?: string
+) => {
+    // * Setup
     const hashedPassword = await hashPassword(body.password);
 
-    let generatedReferralCode: string;
-    let attempts = 0;
-    const maxAttempts = 5;
-    do {
-        if (attempts >= maxAttempts) throw new ApiError(500, "Failed to generate unique referral code", false);
-        generatedReferralCode = await generateReferralCode();
-        const existing = await prisma.user.findUnique({ where: { referralCode: generatedReferralCode } });
-        if (!existing) break;
-        attempts++;
-    } while (true);
-
     // * Check if email already exists
-    const existingEmail = await prisma.user.findUnique({ where: { email: body.email } })
-    if (existingEmail) throw new ApiError(409, "Email already exists");
+    const existingEmail = await prisma.user.findUnique({
+        where: { email: body.email },
+    });
+    if (existingEmail) throw new ApiError(409, 'Email already exists');
 
-    // * Create new user
-    const newUser = await prisma.user.create({
-        data: {
-            ...body,
-            password: hashedPassword,
-            referralCode: generatedReferralCode,
+    // * Check referral code validity & fetch referrer
+    let referrerUser = null;
+    if (referralCode) {
+        referrerUser = await prisma.user.findUnique({
+            where: { referralCode },
+        });
+        if (!referrerUser) throw new ApiError(400, 'Invalid referral code');
+    }
+
+    // * Transaction logic
+    const rollback = await prisma.$transaction(async (tx) => {
+        // * Create new user
+        const newUser = await tx.user.create({
+            data: {
+                ...body,
+                password: hashedPassword,
+                referralCode: await generateReferralCode(),
+            },
+        });
+
+        // * Create coupon for referred user
+        await tx.coupon.create({
+            data: {
+                code: await generateCouponCode(),
+                maxDiscount: 50000,
+                onlyForId: newUser.id,
+                discount: 0.05,
+                quota: 1,
+                expiredDate: dayjs().add(3, 'month').toISOString(),
+            },
+        });
+
+        // * Add points to referrer if exists
+        if (referrerUser) {
+            await tx.point.create({
+                data: {
+                    userId: referrerUser.id,
+                    expiredDate: dayjs().add(3, 'month').toISOString(),
+                },
+            });
         }
-    })
 
-    // *Return when AL IZ WEL
-    return { status: "success", message: "User created successfully", details: newUser }
-}
+        return newUser;
+    });
+
+    // * Return when AL IZ WEL
+    return {
+        status: 'success',
+        message: 'User created successfully',
+        details: rollback,
+    };
+};
 
 export const loginUserService = async (body: Pick<User, 'email' | 'password'>) => {
     // *Check user validity

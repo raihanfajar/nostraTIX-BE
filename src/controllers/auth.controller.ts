@@ -8,7 +8,7 @@ import {
 
 export const registerUserController = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const result = await registerUserService(req.body);
+        const result = await registerUserService(req.body, req.body.referralCode);
         res.status(201).send({ result });
     } catch (error) {
         next(error);
