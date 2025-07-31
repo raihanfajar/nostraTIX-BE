@@ -310,7 +310,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Purwadhika\\MiniProject\\nostraTIX-BE\\src\\generated\\prisma",
+      "value": "C:\\Users\\user mosdef\\Desktop\\Purwadhika\\miniProject\\nostraTIX-BE\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -324,7 +324,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Purwadhika\\MiniProject\\nostraTIX-BE\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\user mosdef\\Desktop\\Purwadhika\\miniProject\\nostraTIX-BE\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
