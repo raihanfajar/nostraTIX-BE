@@ -9,9 +9,9 @@ import { generateReferralCode } from "../utils/generateReferralCode";
 import { generateUniqueSlug } from "../utils/generateSlug";
 
 export const registerUserService = async (
-    body: Pick<User, 'name' | 'email' | 'password'>,
-    referralCode?: string
+    body: Pick<User, 'name' | 'email' | 'password'>, referralCode?:string
 ) => {
+
     // * Setup
     const hashedPassword = await hashPassword(body.password);
 

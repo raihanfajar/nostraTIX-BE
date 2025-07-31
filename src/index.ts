@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 8000;
 
 const app = express();
 
+app.use(cors())
 app.use(express.json()); // !Middleware to parse incoming requests with JSON payloads
 app.use(cors()); // For safely connecting to Front End
 app.use(ApiErrorHandler); // !Custom Error Handler Middleware
