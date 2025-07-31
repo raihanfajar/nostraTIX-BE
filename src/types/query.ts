@@ -6,4 +6,6 @@ export interface query {
 	countryId?: number;
 	cityId?: number;
 	location?: string;
+	limit?: number;
+	page?: number;
 }

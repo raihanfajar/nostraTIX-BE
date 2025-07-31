@@ -3,13 +3,16 @@ import { Prisma } from "../generated/prisma";
 import { query } from "../types/query";
 
 export const getEventsService = async (query: query) => {
-	const { name, category, countryId, cityId, location } = query;
+	const { name, category, countryId, cityId, location, limit, page } = query;
+
+	const take = limit ? Number(limit) : 10; 
+    const currentPage = page ? Number(page) : 1; 
 
 	const whereClause: Prisma.EventWhereInput = {};
 
 	if (name) whereClause.name = { contains: name, mode: "insensitive" };
-	if (countryId) whereClause.countryId = { equals: Number(countryId) };
-	if (cityId) whereClause.cityId = { equals: Number(cityId) };
+	if (countryId) whereClause.countryId = Number(countryId);
+	if (cityId) whereClause.cityId = Number(cityId);
 	if (location)
 		whereClause.location = { contains: location, mode: "insensitive" };
 	whereClause.endDate = {
@@ -17,7 +20,10 @@ export const getEventsService = async (query: query) => {
 	};
 	if (category) whereClause.category = { equals: category };
 
+
 	const events = await prisma.event.findMany({
+		take: take,
+		skip: (currentPage - 1) * Number(take),
 		where: whereClause,
 		include: {
 			pictures: true,
