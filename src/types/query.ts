@@ -7,4 +7,5 @@ export interface query {
 	cityId?: number;
 	location?: string;
 	limit?: number;
+	page?: number;
 }
