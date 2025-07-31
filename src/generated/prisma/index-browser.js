@@ -125,7 +125,6 @@ exports.Prisma.UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   password: 'password',
-  profilePicture: 'profilePicture',
   role: 'role',
   balancePoint: 'balancePoint',
   referralCode: 'referralCode',
@@ -169,6 +168,18 @@ exports.Prisma.PointScalarFieldEnum = {
   deletedAt: 'deletedAt'
 };
 
+exports.Prisma.CountryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  isoCode: 'isoCode'
+};
+
+exports.Prisma.CityScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  countryId: 'countryId'
+};
+
 exports.Prisma.EventScalarFieldEnum = {
   id: 'id',
   organizerId: 'organizerId',
@@ -176,6 +187,8 @@ exports.Prisma.EventScalarFieldEnum = {
   slug: 'slug',
   description: 'description',
   category: 'category',
+  countryId: 'countryId',
+  cityId: 'cityId',
   location: 'location',
   startDate: 'startDate',
   endDate: 'endDate',
@@ -303,6 +316,8 @@ exports.Prisma.ModelName = {
   Organizer: 'Organizer',
   Review: 'Review',
   Point: 'Point',
+  Country: 'Country',
+  City: 'City',
   Event: 'Event',
   EventPicture: 'EventPicture',
   TicketEventCategory: 'TicketEventCategory',

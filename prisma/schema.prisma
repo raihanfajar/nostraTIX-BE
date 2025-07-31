@@ -35,14 +35,13 @@ enum Status {
 // ============== MODELS ==============
 
 model User {
-  id             String @id @default(uuid()) @db.Uuid
-  name           String
-  email          String @unique
-  password       String
-  profilePicture String @default("sample.jpg")
-  role           Role   @default(USER)
-  balancePoint   Int    @default(0)
-  referralCode   String @unique // Dibuat unique karena kode referral seharusnya tidak ada yang sama
+  id           String @id @default(uuid()) @db.Uuid
+  name         String
+  email        String @unique
+  password     String
+  role         Role   @default(USER)
+  balancePoint Int    @default(0)
+  referralCode String @unique // Dibuat unique karena kode referral seharusnya tidak ada yang sama
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -60,7 +59,7 @@ model Organizer {
   name           String
   email          String  @unique
   password       String
-  profilePicture String  @default("sample.jpg")
+  profilePicture String  @default("https://st3.depositphotos.com/13159112/17145/v/450/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg")
   ratings        Float   @default(0)
   description    String  @db.Text
   isActivated    Boolean @default(false)
@@ -99,6 +98,31 @@ model Point {
   user User @relation(fields: [userId], references: [id])
 }
 
+// Model untuk menyimpan semua negara
+model Country {
+  id      Int    @id @default(autoincrement())
+  name    String
+  isoCode String @unique // Kode unik negara, misal: "ID" untuk Indonesia
+
+  cities City[]
+  events Event[]
+
+  @@map("countries")
+}
+
+// Model untuk menyimpan semua kota
+model City {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  countryId Int
+  country   Country @relation(fields: [countryId], references: [id])
+
+  events Event[]
+
+  @@map("cities")
+}
+
 model Event {
   id          String   @id @default(uuid()) @db.Uuid
   organizerId String   @db.Uuid
@@ -106,6 +130,8 @@ model Event {
   slug        String   @unique
   description String   @db.Text
   category    Category
+  countryId   Int
+  cityId      Int
   location    String
   startDate   DateTime
   endDate     DateTime
@@ -122,6 +148,10 @@ model Event {
   transactions     Transaction[]
   vouchers         Voucher[]
   tickets          Ticket[]
+  countries        Country               @relation(fields: [countryId], references: [id])
+  cities           City                  @relation(fields: [cityId], references: [id])
+
+  @@map("events")
 }
 
 model EventPicture {

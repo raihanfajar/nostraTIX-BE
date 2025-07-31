@@ -1,144 +1,139 @@
 const { PrismaClient } = require("./../src/generated/prisma");
+const { Country, City } = require('country-state-city');
 
 const prisma = new PrismaClient();
 
-// Tipe data (: string) dihapus dari fungsi
 function slugify(text) {
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, '-')       // Ganti spasi dengan -
-    .replace(/[^\w\-]+/g, '')   // Hapus karakter yang tidak valid
-    .replace(/\-\-+/g, '-');    // Ganti -- ganda dengan satu -
+  return text.toString().toLowerCase().trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-');
 }
 
+function getRandomItem(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// FUNGSI BARU: Membuat tanggal acak yang valid
+function createRandomDates() {
+  const year = 2025;
+  const month = Math.floor(Math.random() * 12); // 0-11
+  const day = Math.floor(Math.random() * 28) + 1; // Maksimal 28 agar aman untuk semua bulan
+  
+  const startDate = new Date(year, month, day, 10, 0, 0); // Jam 10:00
+  // Tanggal selesai adalah 1 sampai 3 hari setelah tanggal mulai
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + Math.floor(Math.random() * 3) + 1);
+  endDate.setHours(22, 0, 0); // Jam 22:00
+
+  return { startDate, endDate };
+}
+
+// ... (Array imageUrls, eventNames, dll. tetap sama)
 const imageUrls = [
-  "https://images.unsplash.com/photo-1571470804270-af65e8b3d106?q=80&w=1631&auto=format&fit=crop&ixlib-rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://plus.unsplash.com/premium_photo-1686593922853-0b6ba460f2c6?q=80&w=1567&auto=format&fit=crop&ixlib-rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://plus.unsplash.com/premium_photo-1674718013659-6930c469e641?q=80&w=1632&auto=format&fit=crop&ixlib-rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1470345961863-06d4b12d93b3?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1507010430300-19de132ce5ea?q=80&w=1631&auto=format&fit=crop&ixlib-rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://plus.unsplash.com/premium_photo-1670934158407-d2009128cb02?q=80&w=2060&auto=format&fit=crop&ixlib-rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D",
+  "https://images.unsplash.com/photo-1455849318743-b2233052fcff?q=80&w=1169&auto=format&fit=crop&ixlib-rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D",
+  "https://images.unsplash.com/photo-1590845947670-c009801ffa74?q=80&w=2059&auto=format&fit=crop&ixlib-rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D",
+  "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?q=80&w=1074&auto=format&fit=crop&ixlib-rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D",
+  "https://plus.unsplash.com/premium_photo-1680859126181-6f85456f864e?q=80&w=1171&auto=format&fit=crop&ixlib-rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D",
+  "https://plus.unsplash.com/premium_photo-1661962648855-b97a8e025e0e?q=80&w=1632&auto=format&fit=crop&ixlib-rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D",
+  "https://images.unsplash.com/photo-1506765515384-028b60a970df?q=80&w=1169&auto=format&fit=crop&ixlib-rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D",
+  "https://plus.unsplash.com/premium_photo-1682125748265-d362c809ba04?q=80&w=1170&auto=format&fit=crop&ixlib-rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D",
+  "https://images.unsplash.com/photo-1622107795650-24e72a695404?q=80&w=1173&auto=format&fit=crop&ixlib-rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D",
+  "https://images.unsplash.com/photo-1571470804270-af65e8b3d106?q=80&w=1631&auto=format&fit=crop&ixlib-rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D",
+  "https://plus.unsplash.com/premium_photo-1686593922853-0b6ba460f2c6?q=80&w=1567&auto=format&fit=crop&ixlib-rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D",
 ];
+const eventNames = ["Festival Musik Senja", "Pameran Seni Modern", "Bazaar Kuliner Nusantara", "Tech Conference 2025", "Workshop Fotografi Alam", "Konser Amal Peduli Sesama", "Maraton Kemerdekaan", "Pentas Teater Klasik", "Startup Pitching Day", "Pesta Kembang Api Tahun Baru"];
+const ticketCategories = ["Regular", "VIP", "Early Bird", "Student Pass"];
+const categories = ["MUSIC", "ARTS", "FOOD", "BUSINESS", "DATING"];
 
-// Enum Category diubah menjadi array string biasa
-const categories = [
-  "MUSIC",
-  "ARTS",
-  "FOOD",
-  "BUSINESS",
-  "DATING",
-];
-
-const eventsToSeed = [
-  {
-    name: "Jakarta International Jazz Festival 2025",
-    description: "Nikmati alunan jazz dari musisi ternama dunia.",
-    location: "JIExpo Kemayoran, Jakarta",
-    startDate: new Date("2025-09-05T16:00:00Z"),
-    endDate: new Date("2025-09-07T23:00:00Z"),
-  },
-  {
-    name: "Art Jakarta 2025: Synthesis",
-    description: "Pameran seni rupa kontemporer.",
-    location: "Jakarta Convention Center (JCC)",
-    startDate: new Date("2025-10-10T10:00:00Z"),
-    endDate: new Date("2025-10-12T20:00:00Z"),
-  },
-  {
-    name: "Nusantara Food Fair",
-    description: "Jelajahi kekayaan kuliner Indonesia.",
-    location: "Plaza Senayan, Jakarta",
-    startDate: new Date("2025-08-15T11:00:00Z"),
-    endDate: new Date("2025-08-18T21:00:00Z"),
-  },
-  {
-    name: "Indonesia Tech Summit 2025",
-    description: "Konferensi teknologi terbesar di Indonesia.",
-    location: "ICE BSD, Tangerang",
-    startDate: new Date("2025-11-20T09:00:00Z"),
-    endDate: new Date("2025-11-21T17:00:00Z"),
-  },
-  {
-    name: "Speed Dating Night: Find Your Match",
-    description: "Kesempatan untuk bertemu para lajang profesional.",
-    location: "Skye Bar, Jakarta Pusat",
-    startDate: new Date("2025-08-30T19:00:00Z"),
-    endDate: new Date("2025-08-30T22:00:00Z"),
-  },
-  {
-    name: "Bandung Music Fest: Indie Showcase",
-    description: "Panggung bagi band-band indie lokal.",
-    location: "Sabuga, Bandung",
-    startDate: new Date("2025-09-27T15:00:00Z"),
-    endDate: new Date("2025-09-27T23:00:00Z"),
-  },
-  {
-    name: "Ubud Writers & Readers Festival",
-    description: "Festival literasi internasional.",
-    location: "Ubud, Bali",
-    startDate: new Date("2025-10-22T09:00:00Z"),
-    endDate: new Date("2025-10-26T18:00:00Z"),
-  },
-  {
-    name: "Surabaya Food Expo",
-    description: "Pameran industri makanan dan minuman.",
-    location: "Grand City Convex, Surabaya",
-    startDate: new Date("2025-11-05T10:00:00Z"),
-    endDate: new Date("2025-11-08T19:00:00Z"),
-  },
-  {
-    name: "Digital Marketing Conference",
-    description: "Pelajari tren dan strategi pemasaran digital.",
-    location: "Hotel Mulia, Jakarta",
-    startDate: new Date("2025-09-18T09:00:00Z"),
-    endDate: new Date("2025-09-18T17:00:00Z"),
-  },
-  {
-    name: "Electro Night with Local Heroes",
-    description: "Malam penuh irama musik elektronik.",
-    location: "Dragonfly Club, Jakarta",
-    startDate: new Date("2025-08-23T22:00:00Z"),
-    endDate: new Date("2025-08-24T03:00:00Z"),
-  },
-];
 
 async function main() {
-  console.log(`Start seeding ...`);
-  const organizerId = '68749863-b633-40c0-8f0a-fb01af58e7d0';
+  console.log('Start seeding ...');
+  
+  await prisma.ticketEventCategory.deleteMany();
+  await prisma.eventPicture.deleteMany();
+  await prisma.event.deleteMany();
+  await prisma.city.deleteMany();
+  await prisma.country.deleteMany();
+  console.log('Old data deleted.');
 
-  for (let i = 0; i < eventsToSeed.length; i++) {
-    const eventData = eventsToSeed[i];
-    const imageUrl = imageUrls[i % imageUrls.length];
-    const category = categories[i % categories.length];
+  const countryData = Country.getAllCountries().map(c => ({ name: c.name, isoCode: c.isoCode }));
+  await prisma.country.createMany({ data: countryData, skipDuplicates: true });
+  console.log('Countries seeded.');
+
+  const dbCountries = await prisma.country.findMany();
+  const countryMap = new Map(dbCountries.map(c => [c.isoCode, c.id]));
+  const cityData = City.getAllCities().map(c => ({
+    name: c.name,
+    countryId: countryMap.get(c.countryCode),
+  })).filter(c => c.countryId);
+  await prisma.city.createMany({ data: cityData, skipDuplicates: true });
+  console.log('Cities seeded.');
+  
+  const dbCities = await prisma.city.findMany();
+  const organizerId = '3b8c5dd9-3d2c-4723-afc0-5595a7f3eec7';
+
+  for (let i = 0; i < 30; i++) {
+    const randomCity = getRandomItem(dbCities);
+    const eventName = `${getRandomItem(eventNames)} #${i + 1}`;
+    const { startDate, endDate } = createRandomDates(); // Gunakan fungsi baru
 
     const newEvent = await prisma.event.create({
       data: {
-        ...eventData,
-        slug: slugify(eventData.name),
         organizerId: organizerId,
-        category: category,
+        name: eventName,
+        slug: slugify(eventName),
+        description: `Deskripsi untuk ${eventName}.`,
+        category: getRandomItem(categories),
+        location: randomCity.name,
+        startDate: startDate, // Gunakan tanggal yang sudah valid
+        endDate: endDate,     // Gunakan tanggal yang sudah valid
         totalRating: 0,
+        countryId: randomCity.countryId,
+        cityId: randomCity.id,
       },
     });
-
-    console.log(`Created event: ${newEvent.name} (Category: ${category})`);
+    console.log(`Created event: ${newEvent.name}`);
 
     await prisma.eventPicture.create({
       data: {
         eventId: newEvent.id,
-        banner: imageUrl,
-        picture1: imageUrl,
+        banner: getRandomItem(imageUrls),
+        picture1: getRandomItem(imageUrls),
         picture2: null,
         picture3: null,
       },
     });
 
-    console.log(` -> Added pictures for ${newEvent.name}`);
+    await prisma.ticketEventCategory.create({
+      data: {
+        eventId: newEvent.id,
+        name: "General Admission (Free)",
+        description: "Akses masuk gratis.",
+        price: 0,
+        seatQuota: 1000,
+      },
+    });
+    
+    const extraCategories = Math.floor(Math.random() * 2) + 1;
+    for (let j = 0; j < extraCategories; j++) {
+      await prisma.ticketEventCategory.create({
+        data: {
+          eventId: newEvent.id,
+          name: getRandomItem(ticketCategories),
+          description: "Tiket berbayar.",
+          price: (Math.floor(Math.random() * 20) + 5) * 10000,
+          seatQuota: Math.floor(Math.random() * 401) + 100,
+        },
+      });
+    }
+    console.log(` -> Added pictures and ticket categories for ${newEvent.name}`);
   }
 
-  console.log(`Seeding finished.`);
+  console.log('Seeding finished.');
 }
+
 
 main()
   .catch((e) => {

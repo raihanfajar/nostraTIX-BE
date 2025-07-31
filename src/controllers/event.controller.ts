@@ -3,7 +3,8 @@ import { getBannerService, getEventsService } from "../services/event.service";
 import { ApiError } from "../utils/ApiError";
 
 export const getEventsController = async (req: Request, res: Response) => {
-	const result = await getEventsService();
+	const query = req.query;
+	const result = await getEventsService(query);
 
 	if (!result) throw new ApiError(401, "Get events UnSuccessfully");
 
