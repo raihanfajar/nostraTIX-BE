@@ -3,7 +3,7 @@ import { Prisma } from "../generated/prisma";
 import { query } from "../types/query";
 
 export const getEventsService = async (query: query) => {
-	const { name, category, countryId, cityId, location } = query;
+	const { name, category, countryId, cityId, location, limit } = query;
 
 	const whereClause: Prisma.EventWhereInput = {};
 
@@ -18,6 +18,7 @@ export const getEventsService = async (query: query) => {
 	if (category) whereClause.category = { equals: category };
 
 	const events = await prisma.event.findMany({
+		take: Number(limit),
 		where: whereClause,
 		include: {
 			pictures: true,
