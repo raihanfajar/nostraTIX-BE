@@ -9,7 +9,7 @@ import { generateReferralCode } from "../utils/generateReferralCode";
 import { generateUniqueSlug } from "../utils/generateSlug";
 
 export const registerUserService = async (
-    body: Pick<User, 'name' | 'email' | 'password'>, referralCode?:string
+    body: Pick<User, 'name' | 'email' | 'password'>, referralCode?: string
 ) => {
 
     // * Setup
@@ -93,7 +93,7 @@ export const loginUserService = async (body: Pick<User, 'email' | 'password'>) =
     return { status: "success", message: "User logged in successfully", details: { ...rest, accessToken } }
 }
 
-export const registerOrganizerService = async (body: Pick<Organizer, 'name' | 'email' | 'password' | 'description'>) => {
+export const registerOrganizerService = async (body: Pick<Organizer, 'name' | 'email' | 'password'>) => {
     // *Setup
     const hashedPassword = await hashPassword(body.password);
     const generatedSlug = await generateUniqueSlug(body.name);
