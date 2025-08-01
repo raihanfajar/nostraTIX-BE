@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { getBannerService, getEventsService } from "../services/event.service";
+import {
+	getBannerService,
+	getEventBySlugService,
+	getEventsService,
+} from "../services/event.service";
 import { ApiError } from "../utils/ApiError";
 
 export const getEventsController = async (req: Request, res: Response) => {
@@ -19,5 +23,11 @@ export const getEventsController = async (req: Request, res: Response) => {
 
 export const getBannerController = async (req: Request, res: Response) => {
 	const result = await getBannerService();
+	res.status(201).send(result);
+};
+
+export const getEventBySlugController = async (req: Request, res: Response) => {
+	const slug = req.params.slug;
+	const result = await getEventBySlugService(slug);
 	res.status(201).send(result);
 };
