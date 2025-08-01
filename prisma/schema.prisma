@@ -61,7 +61,7 @@ model Organizer {
   password       String
   profilePicture String  @default("https://st3.depositphotos.com/13159112/17145/v/450/depositphotos_171453724-stock-illustration-default-avatar-profile-icon-grey.jpg")
   ratings        Float   @default(0)
-  description    String  @db.Text
+  description    String  @default("This is the description of the event organizer") @db.Text
   isActivated    Boolean @default(false)
 
   createdAt DateTime  @default(now())

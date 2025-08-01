@@ -19377,7 +19377,7 @@ export namespace Prisma {
     password: string
     profilePicture?: string
     ratings?: number
-    description: string
+    description?: string
     isActivated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19393,7 +19393,7 @@ export namespace Prisma {
     password: string
     profilePicture?: string
     ratings?: number
-    description: string
+    description?: string
     isActivated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19441,7 +19441,7 @@ export namespace Prisma {
     password: string
     profilePicture?: string
     ratings?: number
-    description: string
+    description?: string
     isActivated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -23626,7 +23626,7 @@ export namespace Prisma {
     password: string
     profilePicture?: string
     ratings?: number
-    description: string
+    description?: string
     isActivated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -23641,7 +23641,7 @@ export namespace Prisma {
     password: string
     profilePicture?: string
     ratings?: number
-    description: string
+    description?: string
     isActivated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
