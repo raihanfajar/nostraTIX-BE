@@ -87,7 +87,17 @@ export const loginUserService = async (body: Pick<User, 'email' | 'password'>) =
     const payload = { id: existingUser.id, role: existingUser.role };
     const accessToken = generateToken(payload, process.env.JWT_SECRET!, { expiresIn: "2h" });
 
+    const balancePoint = await prisma.point.findMany({
+        where: {
+            userId: existingUser.id,
+            expiredDate: { gte: dayjs().toISOString() }
+        }
+    });
+    existingUser.balancePoint = (balancePoint.length) * 10000;
+
     const { password, ...rest } = existingUser;
+
+    console.log(existingUser);
 
     // *Return when AL IZ WEL
     return { status: "success", message: `Welcome ${existingUser.name}`, details: { ...rest, accessToken } }
