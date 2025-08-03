@@ -90,7 +90,7 @@ export const loginUserService = async (body: Pick<User, 'email' | 'password'>) =
     const { password, ...rest } = existingUser;
 
     // *Return when AL IZ WEL
-    return { status: "success", message: "User logged in successfully", details: { ...rest, accessToken } }
+    return { status: "success", message: `Welcome ${existingUser.name}`, details: { ...rest, accessToken } }
 }
 
 export const registerOrganizerService = async (body: Pick<Organizer, 'name' | 'email' | 'password'>) => {
@@ -131,5 +131,15 @@ export const loginOrganizerService = async (body: Pick<Organizer, 'email' | 'pas
     const { password, ...rest } = existingOrganizer;
 
     // *Return when AL IZ WEL
-    return { status: "success", message: "Organizer logged in successfully", details: { ...rest, accessToken } }
+    return { status: "success", message: `Welcome ${existingOrganizer.name}`, details: { ...rest, accessToken } }
+}
+
+export const validateReferralCodeService = async (body: Pick<User, 'referralCode'>) => {
+    const existingReferralCode = await prisma.user.findUnique({
+        where: { referralCode: body.referralCode },
+    });
+
+    if (!existingReferralCode) throw new ApiError(400, 'Invalid referral code');
+
+    return { status: "success", message: `Referral code ${body.referralCode} is valid`, details: existingReferralCode }
 }

@@ -5,8 +5,8 @@ import { query } from "../types/query";
 export const getEventsService = async (query: query) => {
 	const { name, category, countryId, cityId, location, limit, page } = query;
 
-	const take = limit ? Number(limit) : 10; 
-    const currentPage = page ? Number(page) : 1; 
+	const take = limit ? Number(limit) : 10;
+	const currentPage = page ? Number(page) : 1;
 
 	const whereClause: Prisma.EventWhereInput = {};
 
