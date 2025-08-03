@@ -58,7 +58,12 @@ export const getEventBySlugService = async (slug: string) => {
 		include: {
 			pictures: true,
 			ticketCategories: true,
-			organizer: { omit: { password: true } },
+			organizer: {
+				select: {
+					name: true,
+					profilePicture: true,
+				},
+			},
 		},
 	});
 	if (!event) throw new ApiError(404, "Event not found");

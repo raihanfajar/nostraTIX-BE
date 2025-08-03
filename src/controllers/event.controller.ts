@@ -5,6 +5,7 @@ import {
 	getEventsService,
 } from "../services/event.service";
 import { ApiError } from "../utils/ApiError";
+import { Category } from "../generated/prisma";
 
 export const getEventsController = async (req: Request, res: Response) => {
 	const query = req.query;
@@ -21,7 +22,7 @@ export const getEventsController = async (req: Request, res: Response) => {
 	});
 };
 
-export const getBannerController = async (req: Request, res: Response) => {
+export const getBannerController = async (_: Request, res: Response) => {
 	const result = await getBannerService();
 	res.status(201).send(result);
 };
@@ -30,4 +31,9 @@ export const getEventBySlugController = async (req: Request, res: Response) => {
 	const slug = req.params.slug;
 	const result = await getEventBySlugService(slug);
 	res.status(201).send(result);
+};
+
+export const getAllEventCategories = async (_: Request, res: Response) => {
+	const result = Object.values(Category);
+	res.status(201).json(result);
 };
