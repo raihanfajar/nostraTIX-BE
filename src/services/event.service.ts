@@ -1,6 +1,7 @@
 import prisma from "../config";
 import { Prisma } from "../generated/prisma";
 import { query } from "../types/query";
+import { ApiError } from "../utils/ApiError";
 
 export const getEventsService = async (query: query) => {
 	const { name, category, countryId, cityId, location, limit, page } = query;
@@ -19,7 +20,6 @@ export const getEventsService = async (query: query) => {
 		gte: new Date(), // gte = greater than or equal to
 	};
 	if (category) whereClause.category = { equals: category };
-
 
 	const events = await prisma.event.findMany({
 		take: take,
@@ -41,7 +41,7 @@ export const getBannerService = async () => {
 			// Akses relasi 'event' dan filter kolom di dalamnya
 			event: {
 				endDate: {
-					lt: new Date(),
+					gte: new Date(),
 				},
 			},
 		},
@@ -50,4 +50,23 @@ export const getBannerService = async () => {
 		},
 		take: 5,
 	});
+};
+
+export const getEventBySlugService = async (slug: string) => {
+	const event = await prisma.event.findUnique({
+		where: { slug },
+		include: {
+			pictures: true,
+			ticketCategories: true,
+			organizer: {
+				select: {
+					name: true,
+					profilePicture: true,
+				},
+			},
+		},
+	});
+	if (!event) throw new ApiError(404, "Event not found");
+
+	return event;
 };
