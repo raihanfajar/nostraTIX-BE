@@ -3,6 +3,7 @@ import authRouter from "./auth.route";
 import eventsRouter from "./event.route";
 import locationRouter from "./location.route";
 import organizerRouter from "./organizer.route";
+import { verifyToken } from "../middlewares/jwt.middleware";
 
 const mainRouter = express.Router();
 

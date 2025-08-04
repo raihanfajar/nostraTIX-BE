@@ -84,8 +84,8 @@ export const loginUserService = async (body: Pick<User, 'email' | 'password'>) =
     if (!isPasswordValid) throw new ApiError(400, "Invalid email or password");
 
     // *Generate token
-    const payload = { id: existingUser.id, role: existingUser.role };
-    const accessToken = generateToken(payload, process.env.JWT_SECRET!, { expiresIn: "2h" });
+    const payload = { userId: existingUser.id, role: existingUser.role, balancePoint: existingUser.balancePoint };
+    const accessToken = generateToken(payload, process.env.JWT_SECRET!, { expiresIn: "2h"  });
 
     const balancePoint = await prisma.point.findMany({
         where: {
@@ -135,8 +135,8 @@ export const loginOrganizerService = async (body: Pick<Organizer, 'email' | 'pas
     if (!isPasswordValid) throw new ApiError(400, "Invalid email or password");
 
     // *Generate token
-    const payload = { id: existingOrganizer.id, role: "ORGANIZER" };
-    const accessToken = generateToken(payload, process.env.JWT_SECRET!, { expiresIn: "2h" });
+    const payload = { organizerId: existingOrganizer.id, role: "ORGANIZER"};
+    const accessToken = generateToken(payload, process.env.JWT_SECRET!, { expiresIn: "2h" }); //! Udah ada
 
     const { password, ...rest } = existingOrganizer;
 
