@@ -1,8 +1,10 @@
 import express from "express";
-import { loginOrganizerController, loginUserController, registerOrganizerController, registerUserController, validateReferralCodeController } from "../controllers/auth.controller";
+import { loginOrganizerController, loginUserController, organizerSessionLoginController, registerOrganizerController, registerUserController, sessionLoginController, validateReferralCodeController } from "../controllers/auth.controller";
 
 const authRouter = express.Router();
 
+authRouter.post("/session-login-user", sessionLoginController);
+authRouter.post("/session-login-organizer", organizerSessionLoginController);
 authRouter.post("/register-user", registerUserController);
 authRouter.post("/register-organizer", registerOrganizerController);
 authRouter.post("/login-user", loginUserController);
