@@ -80,8 +80,8 @@ export const createEventController = async (req: Request, res: Response) => {
     }
 
     // 4. Get organizerId from token
-    // const { organizerId } = res.locals.payload;
-    const organizerId = "5ed9f8d9-65a7-4c7b-bdd6-a1c973bf30f4"; // Placeholder for organizerId, replace with actual logic to get from token
+    const { organizerId } = res.locals.payload;
+    // const organizerId = "5ed9f8d9-65a7-4c7b-bdd6-a1c973bf30f4"; // Placeholder for organizerId, replace with actual logic to get from token
     if (!organizerId) {
       throw new ApiError(401, "Unauthorized: Missing organizer ID");
     }
