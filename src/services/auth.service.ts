@@ -84,13 +84,23 @@ export const loginUserService = async (body: Pick<User, 'email' | 'password'>) =
     if (!isPasswordValid) throw new ApiError(400, "Invalid email or password");
 
     // *Generate token
-    const payload = { id: existingUser.id, role: existingUser.role };
-    const accessToken = generateToken(payload, process.env.JWT_SECRET!, { expiresIn: "2h" });
+    const payload = { userId: existingUser.id, role: existingUser.role, balancePoint: existingUser.balancePoint };
+    const accessToken = generateToken(payload, process.env.JWT_SECRET!, { expiresIn: "2h"  });
+
+    const balancePoint = await prisma.point.findMany({
+        where: {
+            userId: existingUser.id,
+            expiredDate: { gte: dayjs().toISOString() }
+        }
+    });
+    existingUser.balancePoint = (balancePoint.length) * 10000;
 
     const { password, ...rest } = existingUser;
 
+    console.log(existingUser);
+
     // *Return when AL IZ WEL
-    return { status: "success", message: "User logged in successfully", details: { ...rest, accessToken } }
+    return { status: "success", message: `Welcome ${existingUser.name}`, details: { ...rest, accessToken } }
 }
 
 export const registerOrganizerService = async (body: Pick<Organizer, 'name' | 'email' | 'password'>) => {
@@ -125,11 +135,21 @@ export const loginOrganizerService = async (body: Pick<Organizer, 'email' | 'pas
     if (!isPasswordValid) throw new ApiError(400, "Invalid email or password");
 
     // *Generate token
-    const payload = { id: existingOrganizer.id, role: "ORGANIZER" };
-    const accessToken = generateToken(payload, process.env.JWT_SECRET!, { expiresIn: "2h" });
+    const payload = { organizerId: existingOrganizer.id, role: "ORGANIZER"};
+    const accessToken = generateToken(payload, process.env.JWT_SECRET!, { expiresIn: "2h" }); //! Udah ada
 
     const { password, ...rest } = existingOrganizer;
 
     // *Return when AL IZ WEL
-    return { status: "success", message: "Organizer logged in successfully", details: { ...rest, accessToken } }
+    return { status: "success", message: `Welcome ${existingOrganizer.name}`, details: { ...rest, accessToken } }
+}
+
+export const validateReferralCodeService = async (body: Pick<User, 'referralCode'>) => {
+    const existingReferralCode = await prisma.user.findUnique({
+        where: { referralCode: body.referralCode },
+    });
+
+    if (!existingReferralCode) throw new ApiError(400, 'Invalid referral code');
+
+    return { status: "success", message: `Referral code ${body.referralCode} is valid`, details: existingReferralCode }
 }

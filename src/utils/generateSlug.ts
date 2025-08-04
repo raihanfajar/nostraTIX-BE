@@ -1,7 +1,7 @@
 import prisma from '../config';
 import { ApiError } from './ApiError';
 
-const baseSlugify = (text: string): string => {
+const baseSlugify: any = (text: string): string => {
     return text
         .toLowerCase()
         .trim()
