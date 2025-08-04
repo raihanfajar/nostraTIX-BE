@@ -85,7 +85,7 @@ export const loginUserService = async (body: Pick<User, 'email' | 'password'>) =
 
     // *Generate token
     const payload = { userId: existingUser.id, role: existingUser.role, balancePoint: existingUser.balancePoint };
-    const accessToken = generateToken(payload, process.env.JWT_SECRET!, { expiresIn: "2h"  });
+    const accessToken = generateToken(payload, process.env.JWT_SECRET!, { expiresIn: "2h" });
 
     const balancePoint = await prisma.point.findMany({
         where: {
@@ -135,7 +135,7 @@ export const loginOrganizerService = async (body: Pick<Organizer, 'email' | 'pas
     if (!isPasswordValid) throw new ApiError(400, "Invalid email or password");
 
     // *Generate token
-    const payload = { organizerId: existingOrganizer.id, role: "ORGANIZER"};
+    const payload = { organizerId: existingOrganizer.id, role: "ORGANIZER" };
     const accessToken = generateToken(payload, process.env.JWT_SECRET!, { expiresIn: "2h" }); //! Udah ada
 
     const { password, ...rest } = existingOrganizer;
@@ -152,4 +152,20 @@ export const validateReferralCodeService = async (body: Pick<User, 'referralCode
     if (!existingReferralCode) throw new ApiError(400, 'Invalid referral code');
 
     return { status: "success", message: `Referral code ${body.referralCode} is valid`, details: existingReferralCode }
+}
+
+export const sessionLoginService = async (id: string) => {
+    const findEmployeeById = await prisma.user.findUnique({ where: { id } });
+
+    if (!findEmployeeById) throw new ApiError(404, "User not found");
+
+    return { status: "success", message: "User found", details: findEmployeeById }
+}
+
+export const organizerSessionLoginService = async (id: string) => {
+    const findOrganizerById = await prisma.organizer.findUnique({ where: { id } });
+
+    if (!findOrganizerById) throw new ApiError(404, "Organizer not found");
+
+    return { status: "success", message: "Organizer found"}
 }
