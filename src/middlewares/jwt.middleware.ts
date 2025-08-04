@@ -1,30 +1,29 @@
+import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express"
-import { verify } from "jsonwebtoken";
 import { Role } from "../generated/prisma";
 import { ApiError } from "../utils/ApiError";
 
-export const verifyToken = (secretKey: string) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization?.split(" ")[1];
+export const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
+  const token = req.headers.authorization?.split(" ")[1];
 
-    if (!token) throw new ApiError(401, "Token not provided!");
+  if (!token) throw new ApiError(401, "Token not provided!");
 
-    verify(token, secretKey, (err, payload) => {
-      if (err) throw new ApiError(401, "Token Expired/Invalid token!");
+  const payload = await jwt.verify(token, process.env.JWT_SECRET!);
 
-      res.locals.user = payload; // Store the payload in res.locals for access in subsequent middleware or route handlers
-      next(); // Proceed to the next middleware or route handler
-    })
-  }
+  if (!payload) throw new ApiError(401, "Invalid token!");
+
+  res.locals.payload = payload;
+
+  next();
 }
 
-export const verifyRole = (roles: Role[]) => {
+export const verifyRole = (roles: string) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const userRole = res.locals.user.role;
+    const userRole = res.locals.payload.role;
 
     if (!userRole) throw new ApiError(403, "Unauthorized access!");
 
-    if (!userRole || !roles.includes(userRole)) throw new ApiError(403, "Forbidden: You do not have the required role!");
+    if (userRole !== roles) throw new ApiError(403, "Forbidden: You do not have the required role!");
 
     next(); // Proceed to the next middleware or route handler
   }

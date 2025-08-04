@@ -3,7 +3,8 @@ import {
     loginOrganizerService,
     loginUserService,
     registerOrganizerService,
-    registerUserService
+    registerUserService,
+    validateReferralCodeService
 } from "../services/auth.service";
 
 export const registerUserController = async (req: Request, res: Response, next: NextFunction) => {
@@ -41,3 +42,12 @@ export const loginOrganizerController = async (req: Request, res: Response, next
         next(error);
     }
 };
+
+export const validateReferralCodeController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await validateReferralCodeService(req.body);
+        res.status(200).send({ result });
+    } catch (error) {
+        next(error);
+    }
+}
