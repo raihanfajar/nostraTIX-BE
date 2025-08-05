@@ -7,6 +7,7 @@ import {
 	getEventsController,
 } from "../controllers/event.controller";
 import { uploaderMulter } from "../middlewares/Uploader.Multer";
+import { verifyRole, verifyToken } from "../middlewares/jwt.middleware";
 
 const eventsRouter = express.Router();
 const uploader = uploaderMulter(
@@ -20,6 +21,8 @@ eventsRouter.get("/categories", getAllEventCategories);
 eventsRouter.get("/:slug", getEventBySlugController);
 eventsRouter.post(
 	"/create",
+	verifyToken,
+	verifyRole("ORGANIZER"),
 	uploader.fields([
 		{ name: "banner", maxCount: 1 },
 		{ name: "picture1", maxCount: 1 },
