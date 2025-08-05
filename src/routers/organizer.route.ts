@@ -8,5 +8,7 @@ organizerRouter.get("/profile", verifyToken, verifyRole("ORGANIZER"), getOrganiz
 organizerRouter.patch("/profile/update", verifyToken, verifyRole("ORGANIZER"), patchOrganizerProfileController);
 organizerRouter.patch("/profile/change-password", verifyToken, verifyRole("ORGANIZER"), changePasswordController);
 
+organizerRouter.get("/profile/overview", verifyToken, verifyRole("ORGANIZER"), getOrganizerProfileController);
+
 
 export default organizerRouter;
