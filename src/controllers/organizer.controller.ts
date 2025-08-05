@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { changePasswordService, getOrganizerProfileService, getOverviewService, getRevenueOverviewService, patchOrganizerProfileService } from "../services/organizer.service";
+import { changePasswordService, getEventsSummaryService, getOrganizerProfileService, getOverviewService, getRevenueOverviewService, patchOrganizerProfileService } from "../services/organizer.service";
 
 // src/controllers/organizer.controller.ts
 export const getOrganizerProfileController = async (req: Request, res: Response, next: NextFunction) => {
@@ -46,11 +46,21 @@ export const getOverviewController = async (req: Request, res: Response, next: N
 export const getRevenueOverviewController = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { organizerId } = res.locals.payload;
-        
+
         // quert parameter `view`
         const view = req.query.view as "daily" | "monthly" | "yearly";
         const result = await getRevenueOverviewService({ id: organizerId }, view);
         res.status(200).send({ result });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getEventsSummaryController = async (req: Request, res: Response, next: NextFunction,) => {
+    try {
+        const { organizerId } = res.locals.payload;
+        const result = await getEventsSummaryService(organizerId);
+        res.status(200).json({ result });
     } catch (error) {
         next(error);
     }

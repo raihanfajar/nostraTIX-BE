@@ -170,9 +170,79 @@ export const getRevenueOverviewService = async (body: Pick<Organizer, "id">, vie
         return aDate.isBefore(bDate) ? -1 : 1;
     });
 
+    console.log(revenueChart);
+
     return {
         status: "success",
         message: "Revenue overview fetched successfully",
         data: revenueChart,
+    };
+};
+
+export const getEventsSummaryService = async (organizerId: string) => {
+    const events = await prisma.event.findMany({
+        where: {
+            organizerId,
+            deletedAt: null,
+        },
+        select: {
+            id: true,
+            name: true,
+            category: true,
+            startDate: true,
+            endDate: true,
+            location: true,
+            countries: {
+                select: {
+                    name: true,
+                },
+            },
+            cities: {
+                select: {
+                    name: true,
+                },
+            },
+            transactions: {
+                where: { status: "DONE" },
+                select: {
+                    totalPrice: true,
+                    quantity: true,
+                },
+            },
+        },
+        orderBy: {
+            startDate: "desc",
+        },
+    });
+
+    const formattedEvents = events.map((event) => {
+        const ticketsSold = event.transactions.reduce(
+            (total, tx) => total + tx.quantity,
+            0,
+        );
+
+        const revenue = event.transactions.reduce(
+            (total, tx) => total + tx.totalPrice,
+            0,
+        );
+
+        return {
+            id: event.id,
+            name: event.name,
+            category: event.category,
+            startDate: event.startDate.toISOString(),
+            endDate: event.endDate.toISOString(),
+            country: event.countries.name,
+            city: event.cities.name,
+            location: event.location,
+            ticketsSold,
+            revenue,
+        };
+    });
+
+    return {
+        status: "success",
+        message: "Events summary fetched successfully",
+        data: formattedEvents,
     };
 };

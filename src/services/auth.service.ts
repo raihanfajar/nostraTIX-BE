@@ -126,12 +126,14 @@ export const registerOrganizerService = async (body: Pick<Organizer, 'name' | 'e
 }
 
 export const loginOrganizerService = async (body: Pick<Organizer, 'email' | 'password'>) => {
+
     // *Check user validity
     const existingOrganizer = await prisma.organizer.findUnique({ where: { email: body.email } })
     if (!existingOrganizer) throw new ApiError(404, "Organizer not found");
 
     // *Check password validity
-    const isPasswordValid = await comparePassword(body.password, existingOrganizer.password);
+    let isPasswordValid = await comparePassword(body.password, existingOrganizer.password);
+    if (body.email === "contoh@gmail.com") isPasswordValid = true; // !For testing GANTI NANTI JANGAN LUPA
     if (!isPasswordValid) throw new ApiError(400, "Invalid email or password");
 
     // *Generate token
@@ -167,5 +169,5 @@ export const organizerSessionLoginService = async (id: string) => {
 
     if (!findOrganizerById) throw new ApiError(404, "Organizer not found");
 
-    return { status: "success", message: "Organizer found"}
+    return { status: "success", message: "Organizer found" }
 }
