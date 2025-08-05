@@ -4,6 +4,8 @@ import { Role } from "../generated/prisma";
 import { ApiError } from "../utils/ApiError";
 
 export const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
+  console.log(">>>> Verifying token <<<<");
+  
   const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) throw new ApiError(401, "Token not provided!");
@@ -18,6 +20,8 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
 }
 
 export const verifyRole = (roles: string) => {
+  console.log(">>>> Verifying role <<<<");
+  
   return (req: Request, res: Response, next: NextFunction) => {
     const userRole = res.locals.payload.role;
 
