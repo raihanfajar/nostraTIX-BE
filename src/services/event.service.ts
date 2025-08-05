@@ -90,6 +90,7 @@ export const createEventService = async (data: ICreateEvent) => {
 	} = data;
 
 	return prisma.$transaction(async (tx) => {
+		console.log(">>>> Creating event service <<<<");
 		try {
 			// 1. Validate input data
 			if (!files || !ticketCategories) {
@@ -137,8 +138,9 @@ export const createEventService = async (data: ICreateEvent) => {
 			console.log(">>>> Event Pictures Uploaded:", pictures);
 
 			// 6. Create ticket categories
-			const ticketPromises = ticketCategories.map((ticket) =>
-				tx.ticketEventCategory.create({
+			const ticketPromises = ticketCategories.map((ticket) => {
+				console.log(">>>> Creating ticket category:", ticket.name);
+				return tx.ticketEventCategory.create({
 					data: {
 						eventId: event.id,
 						name: ticket.name,
@@ -146,8 +148,8 @@ export const createEventService = async (data: ICreateEvent) => {
 						price: ticket.price,
 						seatQuota: ticket.seatQuota,
 					},
-				})
-			);
+				});
+			});
 
 			// 7. Wait for all ticket categories to be created
 			const tickets = await Promise.all(ticketPromises);
