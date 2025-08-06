@@ -1,5 +1,5 @@
 import express from "express";
-import { changePasswordController, deleteEventController, editEventController, getEventAttendeesController, getEventsSummaryController, getOrganizerProfileController, getOverviewController, getRevenueOverviewController, patchOrganizerProfileController } from "../controllers/organizer.controller";
+import { changePasswordController, deleteEventController, editEventController, getEventAttendeesController, getEventsSummaryController, getOrganizerProfileController, getOverviewController, getPendingTransactionsByOrganizerIdController, getRevenueOverviewController, patchOrganizerProfileController } from "../controllers/organizer.controller";
 import { verifyRole, verifyToken } from "../middlewares/jwt.middleware";
 
 const organizerRouter = express.Router();
@@ -18,5 +18,8 @@ organizerRouter.get("/events/events-summary", verifyToken, verifyRole("ORGANIZER
 organizerRouter.get("/events/:eventId/attendees", verifyToken, verifyRole("ORGANIZER"), getEventAttendeesController);
 organizerRouter.delete("/events/delete/:eventId", verifyToken, verifyRole("ORGANIZER"), deleteEventController);
 organizerRouter.patch("/events/edit/:eventId", verifyToken, verifyRole("ORGANIZER"), editEventController);
+
+// !Transactions
+organizerRouter.get("/transactions/pending", verifyToken, verifyRole("ORGANIZER"), getPendingTransactionsByOrganizerIdController);
 
 export default organizerRouter;

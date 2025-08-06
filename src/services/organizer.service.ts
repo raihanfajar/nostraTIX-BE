@@ -358,3 +358,99 @@ export const editEventService = async ({
 
     return updatedEvent;
 };
+
+
+export const getPendingTransactionsByOrganizerIdService = async (organizerId: string) => {
+    // Check if organizer exists
+    const organizer = await prisma.organizer.findFirst({
+        where: { id: organizerId, deletedAt: null },
+    });
+
+    if (!organizer) throw new ApiError(404, "Organizer not found");
+
+    // Get all pending transactions related to the organizer's events
+    const transactions = await prisma.transaction.findMany({
+        where: {
+            status: "WAITING_FOR_CONFIRMATION",
+            deletedAt: null,
+            event: {
+                organizerId,
+                deletedAt: null,
+            },
+        },
+        select: {
+            id: true,
+            paymentProof: true,
+            point: true,
+            quantity: true,
+            totalPrice: true,
+            couponCode: true,
+            voucherCode: true,
+            user: {
+                select: {
+                    name: true,
+                },
+            },
+            event: {
+                select: {
+                    name: true,
+                },
+            },
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
+
+    // Format to TxRow[]
+    const txRows = transactions.map((tx) => ({
+        id: tx.id,
+        customer: tx.user.name,
+        event: tx.event.name,
+        amount: tx.totalPrice,
+        seats: tx.quantity,
+        proofUrl: tx.paymentProof ?? "", // you may want to return full URL
+        usedPoints: tx.point || undefined,
+        usedCoupon: tx.couponCode || undefined,
+        usedVoucher: tx.voucherCode || undefined,
+    }));
+
+    console.log(txRows);
+
+    return {
+        status: "success",
+        message: "Pending transactions fetched successfully",
+        result: txRows,
+    };
+};
+
+export const acceptTransactionService = async (txId: string, organizerId: string) => {
+    // ensure the organizer owns the event
+    const tx = await prisma.transaction.findUnique({
+        where: { id: txId },
+        include: { event: { select: { organizerId: true } } },
+    });
+    if (!tx) throw new ApiError(404, "Transaction not found");
+    if (tx.event.organizerId !== organizerId) throw new ApiError(403, "Forbidden");
+
+    const updated = await prisma.transaction.update({
+        where: { id: txId },
+        data: { status: "DONE" },
+    });
+    return updated;
+};
+
+export const rejectTransactionService = async (txId: string, organizerId: string) => {
+    const tx = await prisma.transaction.findUnique({
+        where: { id: txId },
+        include: { event: { select: { organizerId: true } } },
+    });
+    if (!tx) throw new ApiError(404, "Transaction not found");
+    if (tx.event.organizerId !== organizerId) throw new ApiError(403, "Forbidden");
+
+    const updated = await prisma.transaction.update({
+        where: { id: txId },
+        data: { status: "REJECTED" },
+    });
+    return updated;
+};

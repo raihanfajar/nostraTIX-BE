@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { changePasswordService, deleteEventService, editEventService, getEventAttendeesService, getEventsSummaryService, getOrganizerProfileService, getOverviewService, getRevenueOverviewService, patchOrganizerProfileService } from "../services/organizer.service";
+import { acceptTransactionService, changePasswordService, deleteEventService, editEventService, getEventAttendeesService, getEventsSummaryService, getOrganizerProfileService, getOverviewService, getPendingTransactionsByOrganizerIdService, getRevenueOverviewService, patchOrganizerProfileService, rejectTransactionService } from "../services/organizer.service";
 
 // src/controllers/organizer.controller.ts
 export const getOrganizerProfileController = async (req: Request, res: Response, next: NextFunction) => {
@@ -131,3 +131,35 @@ export const editEventController = async (req: Request, res: Response) => {
     }
 };
 
+export const getPendingTransactionsByOrganizerIdController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { organizerId } = res.locals.payload;
+        if (!organizerId) return res.status(400).json({ status: "error", message: "Unauthorized access" });
+        const result = await getPendingTransactionsByOrganizerIdService(organizerId);
+        res.status(200).json({ result });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const acceptTransactionController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { organizerId } = res.locals.payload;
+        const { txId } = req.params;
+        const updated = await acceptTransactionService(txId, organizerId);
+        res.json({ result: { status: "success", message: "Accepted", transaction: updated } });
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const rejectTransactionController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { organizerId } = res.locals.payload;
+        const { txId } = req.params;
+        const updated = await rejectTransactionService(txId, organizerId);
+        res.json({ result: { status: "success", message: "Rejected", transaction: updated } });
+    } catch (err) {
+        next(err);
+    }
+};
