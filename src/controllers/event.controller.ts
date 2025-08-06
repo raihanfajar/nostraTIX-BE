@@ -7,7 +7,7 @@ import {
 } from "../services/event.service";
 import { Category } from "../generated/prisma";
 import { ApiError } from "../utils/ApiError";
-import { ICreateEvent, IEventPictures, ITicketCategory } from "../types/event";
+import { ICreateEvent, ITicketCategory } from "../types/event";
 import multer from "multer";
 
 const upload = multer().fields([

@@ -65,6 +65,7 @@ export const getEventBySlugService = async (slug: string) => {
 				select: {
 					name: true,
 					profilePicture: true,
+					slug: true,
 				},
 			},
 		},

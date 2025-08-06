@@ -181,30 +181,34 @@ model TicketEventCategory {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  event   Event    @relation(fields: [eventId], references: [id])
-  tickets Ticket[]
+  event       Event         @relation(fields: [eventId], references: [id])
+  tickets     Ticket[]
+  Transaction Transaction[]
 }
 
 model Transaction {
-  id           String  @id @default(uuid()) @db.Uuid
-  eventId      String  @db.Uuid
-  userId       String  @db.Uuid
-  voucherCode  String?
-  couponCode   String?
-  paymentProof String?
-  status       Status  @default(WAITING_PAYMENT)
-  quantity     Int
-  totalPrice   Int     @default(0)
+  id                    String   @id @default(uuid()) @db.Uuid
+  eventId               String   @db.Uuid
+  userId                String   @db.Uuid
+  ticketEventCategoryId Int
+  voucherCode           String?
+  couponCode            String?
+  paymentProof          String?
+  status                Status   @default(WAITING_PAYMENT)
+  quantity              Int
+  totalPrice            Int      @default(0)
+  expiryAt              DateTime
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  event   Event    @relation(fields: [eventId], references: [id])
-  user    User     @relation(fields: [userId], references: [id])
-  voucher Voucher? @relation(fields: [voucherCode], references: [code])
-  coupon  Coupon?  @relation(fields: [couponCode], references: [code])
-  tickets Ticket[]
+  TicketEventCategory TicketEventCategory @relation(fields: [ticketEventCategoryId], references: [id])
+  event               Event               @relation(fields: [eventId], references: [id])
+  user                User                @relation(fields: [userId], references: [id])
+  voucher             Voucher?            @relation(fields: [voucherCode], references: [code])
+  coupon              Coupon?             @relation(fields: [couponCode], references: [code])
+  tickets             Ticket[]
 }
 
 model Ticket {
@@ -215,7 +219,7 @@ model Ticket {
   eventName       String
   nameCategory    String
   eventDate       DateTime
-  qrCode          String   @default("qrcode.jpg")
+  qrCode          String   @default("https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/QR_Code_Example.svg/368px-QR_Code_Example.svg.png")
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
