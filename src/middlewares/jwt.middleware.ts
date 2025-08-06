@@ -1,18 +1,20 @@
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { NextFunction, Request, Response } from "express"
-import { Role } from "../generated/prisma";
 import { ApiError } from "../utils/ApiError";
 
 export const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
-  console.log(">>>> Verifying token <<<<");
-  
+
   const token = req.headers.authorization?.split(" ")[1];
 
-  if (!token) throw new ApiError(401, "Token not provided!");
+  if (!token) {
+    throw new ApiError(401, "Token not provided!");
+  };
 
-  const payload = await jwt.verify(token, process.env.JWT_SECRET!);
+  const payload = jwt.verify(token, process.env.JWT_SECRET!);
 
-  if (!payload) throw new ApiError(401, "Invalid token!");
+  if (!payload) {
+    throw new ApiError(401, "Invalid token!");
+  };
 
   res.locals.payload = payload;
 
@@ -20,8 +22,7 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
 }
 
 export const verifyRole = (roles: string) => {
-  console.log(">>>> Verifying role <<<<");
-  
+
   return (req: Request, res: Response, next: NextFunction) => {
     const userRole = res.locals.payload.role;
 
