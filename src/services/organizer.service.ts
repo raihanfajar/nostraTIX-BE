@@ -246,3 +246,115 @@ export const getEventsSummaryService = async (organizerId: string) => {
         data: formattedEvents,
     };
 };
+
+export const getEventAttendeesService = async (eventId: string) => {
+    if (!eventId) {
+        throw new ApiError(400, "Event ID is required");
+    }
+
+    const tickets = await prisma.ticket.findMany({
+        where: {
+            eventId,
+            deletedAt: null,
+            transaction: {
+                status: "DONE",
+            },
+        },
+        select: {
+            id: true,
+            nameCategory: true,
+            eventDate: true,
+            transaction: {
+                select: {
+                    totalPrice: true, // 💰 get the total money paid
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    const attendees = tickets.map((ticket) => ({
+        ticketId: ticket.id,
+        attendeeId: ticket.transaction.user.id,
+        name: ticket.transaction.user.name,
+        email: ticket.transaction.user.email,
+        category: ticket.nameCategory?.trim() || "Uncategorized",
+        eventDate: ticket.eventDate,
+        paidAmount: ticket.transaction.totalPrice, // 💰 included here
+    }));
+
+    return {
+        status: "success",
+        message: "Attendees fetched successfully",
+        data: attendees,
+    };
+};
+
+export const deleteEventService = async (eventId: string) => {
+    if (!eventId) {
+        throw new ApiError(400, "Event ID is required");
+    }
+
+    await prisma.event.update({
+        where: {
+            id: eventId,
+        },
+        data: {
+            deletedAt: new Date(),
+        },
+    });
+
+    return {
+        status: "success",
+        message: "Event deleted successfully",
+    };
+}
+
+interface EditEventInput {
+    eventId: string;
+    organizerId: string;
+    name?: string;
+    description?: string;
+    category?: string;
+    location?: string;
+    startDate?: Date;
+    endDate?: Date;
+}
+
+export const editEventService = async ({
+    eventId,
+    organizerId,
+    ...updates
+}: EditEventInput) => {
+    const existingEvent = await prisma.event.findFirst({
+        where: {
+            id: eventId,
+            organizerId,
+            deletedAt: null,
+        },
+    });
+
+    if (!existingEvent) {
+        throw new Error("Event not found or unauthorized.");
+    }
+
+    const filteredUpdates = Object.fromEntries(
+        Object.entries(updates).filter(([_, value]) => value !== undefined)
+    );
+
+    const updatedEvent = await prisma.event.update({
+        where: { id: eventId },
+        data: {
+            ...filteredUpdates,
+            updatedAt: new Date(),
+        },
+    });
+
+    return updatedEvent;
+};
