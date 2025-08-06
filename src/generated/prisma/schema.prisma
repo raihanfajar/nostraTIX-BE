@@ -184,20 +184,21 @@ model TicketEventCategory {
   event       Event         @relation(fields: [eventId], references: [id])
   tickets     Ticket[]
   Transaction Transaction[]
+  event       Event         @relation(fields: [eventId], references: [id])
+  tickets     Ticket[]
+  Transaction Transaction[]
 }
 
 model Transaction {
-  id                    String   @id @default(uuid()) @db.Uuid
-  eventId               String   @db.Uuid
-  userId                String   @db.Uuid
-  ticketEventCategoryId Int
-  voucherCode           String?
-  couponCode            String?
-  paymentProof          String?
-  status                Status   @default(WAITING_PAYMENT)
-  quantity              Int
-  totalPrice            Int      @default(0)
-  expiryAt              DateTime
+  id           String  @id @default(uuid()) @db.Uuid
+  eventId      String  @db.Uuid
+  userId       String  @db.Uuid
+  voucherCode  String?
+  couponCode   String?
+  paymentProof String?
+  status       Status  @default(WAITING_PAYMENT)
+  quantity     Int
+  totalPrice   Int     @default(0)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
