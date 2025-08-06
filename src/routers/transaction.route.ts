@@ -4,6 +4,8 @@ import {
 	createVoucherController,
 	getAllCouponController,
 	getAllVoucherController,
+	getAllVoucherControllerLiterally,
+	getUserTicketsController,
 	getWaitingConfirmationTransactionsController,
 	setStatusTransactionController,
 	uploadPaymentTransactionController,
@@ -44,5 +46,7 @@ transactionRouter.post(
 	verifyRole("ORGANIZER"),
 	createVoucherController
 );
+transactionRouter.get("/voucher", getAllVoucherControllerLiterally);
+transactionRouter.get("/ticket", getUserTicketsController);
 
 export default transactionRouter;

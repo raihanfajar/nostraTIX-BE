@@ -3,6 +3,8 @@ import prisma from "../config";
 import { Organizer } from "../generated/prisma";
 import { comparePassword, hashPassword } from "../lib/bcrypt";
 import { ApiError } from "../utils/ApiError";
+
+
 export const getOrganizerProfileService = async (body: Pick<Organizer, 'id'>) => {
 
     const targetOrganizer = await prisma.organizer.findUnique({
@@ -53,7 +55,6 @@ export const changePasswordService = async (body: Pick<Organizer, 'id' | 'passwo
 
     return { status: "success", message: "Password updated", details: updatedOrganizer }
 }
-
 
 export const getOverviewService = async (body: Pick<Organizer, 'id'>) => {
     // 1. Count total events
@@ -358,7 +359,6 @@ export const editEventService = async ({
 
     return updatedEvent;
 };
-
 
 export const getPendingTransactionsByOrganizerIdService = async (organizerId: string) => {
     // Check if organizer exists

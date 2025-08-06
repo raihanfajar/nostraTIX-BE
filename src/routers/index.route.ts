@@ -12,5 +12,7 @@ mainRouter.use("/api/auth", authRouter);
 mainRouter.use("/events", eventsRouter);
 mainRouter.use("/location", locationRouter);
 mainRouter.use("/organizer", organizerRouter);
+mainRouter.use("/transaction", transactionRouter);
+mainRouter.use("/user", userRouter);
 
 export default mainRouter;

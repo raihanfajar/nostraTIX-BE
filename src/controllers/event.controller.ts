@@ -4,6 +4,9 @@ import {
 	getBannerService,
 	getEventBySlugService,
 	getEventsService,
+	getOrganizerProfileBySlugService,
+	getUserTransactionsService,
+	getUserWaitingTransactionsService,
 } from "../services/event.service";
 import { Category } from "../generated/prisma";
 import { ApiError } from "../utils/ApiError";
@@ -182,5 +185,60 @@ export const createEventController = async (req: Request, res: Response) => {
 			success: false,
 			message: "Internal server error",
 		});
+	}
+};
+
+export const getOrganizerProfileBySlugController = async (
+	req: Request,
+	res: Response
+) => {
+	try {
+		const slug = req.params.slug;
+		if (!slug) {
+			return res.status(400).json({ message: "Slug is required" });
+		}
+
+		const organizer = await getOrganizerProfileBySlugService(slug);
+		return res.status(200).json(organizer);
+	} catch (error: any) {
+		return res.status(error.statusCode || 500).json({
+			message: error.message || "Internal Server Error",
+		});
+	}
+};
+
+export const getUserTransactionsController = async (
+	req: Request,
+	res: Response
+) => {
+	try {
+		const userId = req.params.userId || res.locals.payload;
+		if (!userId) {
+			return res.status(400).json({ message: "User ID is required" });
+		}
+
+		const transactions = await getUserTransactionsService(userId);
+		return res.status(200).json(transactions);
+	} catch (error: any) {
+		console.error("Error in getUserTransactionsController:", error);
+		return res.status(error.statusCode || 500).json({ message: error.message });
+	}
+};
+
+export const getUserWaitingTransactionsController = async (
+	req: Request,
+	res: Response
+) => {
+	try {
+		const userId = req.params.userId || res.locals.payload;
+		if (!userId) {
+			return res.status(400).json({ message: "User ID is required" });
+		}
+
+		const transactions = await getUserWaitingTransactionsService(userId);
+		return res.status(200).json(transactions);
+	} catch (error: any) {
+		console.error("Error in getUserWaitingTransactionsController:", error);
+		return res.status(error.statusCode || 500).json({ message: error.message });
 	}
 };

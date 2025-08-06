@@ -4,6 +4,8 @@ import {
 	createVoucherService,
 	getAllCouponServiceByCode,
 	getAllVoucherService,
+	getAllVoucherServiceLiterally,
+	getUserTicketsService,
 	getWaitingConfirmationTransactionsService,
 	setStatusTransactionService,
 	uploadPaymentTransactionService,
@@ -107,6 +109,20 @@ export const getAllVoucherController = async (req: Request, res: Response) => {
 	res.status(201).json(result);
 };
 
+export const getAllVoucherControllerLiterally = async (
+	req: Request,
+	res: Response
+) => {
+	const eventId = req.query.eventId as string;
+
+	const result = await getAllVoucherServiceLiterally(eventId);
+	if (!result || result.length === 0) {
+		return res.status(404).json({ message: "Voucher not found" });
+	}
+
+	res.status(200).json(result);
+};
+
 export const setStatusTransactionController = async (
 	req: Request,
 	res: Response
@@ -160,6 +176,8 @@ export const getWaitingConfirmationTransactionsController = async (
 };
 
 export const createVoucherController = async (req: Request, res: Response) => {
+	console.log(">>>>");
+
 	try {
 		const { organizerId } = res.locals.payload;
 
@@ -185,4 +203,14 @@ export const createVoucherController = async (req: Request, res: Response) => {
 			message: error.message || "Failed to create voucher",
 		});
 	}
+};
+
+export const getUserTicketsController = async (req: Request, res: Response) => {
+  try {
+    const userId = res.locals.payload; 
+    const tickets = await getUserTicketsService(userId);
+    return res.status(200).json(tickets);
+  } catch (error: any) {
+    return res.status(error.statusCode || 500).json({ message: error.message });
+  }
 };

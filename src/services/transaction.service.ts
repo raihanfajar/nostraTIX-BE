@@ -179,6 +179,15 @@ export const getAllVoucherService = async (code: string) => {
 	return result;
 };
 
+export const getAllVoucherServiceLiterally = async (eventId: string) => {
+	const result = prisma.voucher.findMany({
+		where: { eventId: eventId} ,
+	});
+
+	if (!result) throw new ApiError(404, "Coupon not found");
+	return result;
+};
+
 export const setStatusTransactionService = async (
 	data: ISetStatusTransaction
 ) => {
@@ -355,4 +364,27 @@ export const createVoucherService = async (data: IVoucherCreate) => {
   });
 
   return voucher;
+};
+
+export const getUserTicketsService = async (userId: string) => {
+  return prisma.ticket.findMany({
+    where: {
+      transaction: {
+        userId,
+      },
+    },
+    include: {
+      event: true,
+      category: true,
+      transaction: {
+        select: {
+          status: true,
+          quantity: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 };

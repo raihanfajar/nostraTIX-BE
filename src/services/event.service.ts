@@ -215,3 +215,71 @@ const uploadEventPictures = async (
 		throw new ApiError(500, "Failed to upload event pictures");
 	}
 };
+
+export const getOrganizerProfileBySlugService = async (slug: string) => {
+  const organizer = await prisma.organizer.findUnique({
+    where: { slug },
+    select: {
+      id: true,
+      slug: true,
+      name: true,
+      email: true,
+      profilePicture: true,
+      ratings: true,
+      description: true,
+      isActivated: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+
+  if (!organizer) {
+    throw new ApiError(404, "Organizer not found");
+  }
+
+  return organizer;
+};
+
+export const getUserTransactionsService = async (userId: string) => {
+  const transactions = await prisma.transaction.findMany({
+    where: { userId },
+    select: {
+      id: true,
+      quantity: true,
+      totalPrice: true,
+      status: true,
+      createdAt: true,
+      event: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return transactions;
+};
+
+export const getUserWaitingTransactionsService = async (userId: string) => {
+  const transactions = await prisma.transaction.findMany({
+    where: { userId, status: "WAITING_PAYMENT" },
+    select: {
+      id: true,
+      quantity: true,
+      totalPrice: true,
+      status: true,
+      createdAt: true,
+      event: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return transactions;
+};
