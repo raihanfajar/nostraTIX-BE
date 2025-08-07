@@ -5,6 +5,9 @@ import {
 	getBannerController,
 	getEventBySlugController,
 	getEventsController,
+	getOrganizerProfileBySlugController,
+	getUserTransactionsController,
+	getUserWaitingTransactionsController,
 } from "../controllers/event.controller";
 import { uploaderMulter } from "../middlewares/Uploader.Multer";
 import { verifyRole, verifyToken } from "../middlewares/jwt.middleware";
@@ -31,5 +34,8 @@ eventsRouter.post(
 	]),
 	createEventController
 );
+eventsRouter.get("/profile/:slug", getOrganizerProfileBySlugController);
+eventsRouter.get("/user/:userId", verifyToken, getUserTransactionsController);
+eventsRouter.get("/user/waiting/:userId", verifyToken,  getUserWaitingTransactionsController);
 
 export default eventsRouter;
