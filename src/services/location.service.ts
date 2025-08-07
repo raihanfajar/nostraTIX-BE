@@ -9,3 +9,15 @@ export const getAllCityByCountryIdService = async (countryId: number) => {
 		where: { countryId: countryId },
 	});
 };
+
+export const getCountryByIdService = async (countryId: number) => {
+	return await prisma.country.findFirst({
+		where: { id: countryId },
+	});
+}
+
+export const getCityByIdService = async (cityId: number) => {
+	return await prisma.city.findFirst({
+		where: { id: cityId },
+	});
+}
