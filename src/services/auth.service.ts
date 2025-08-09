@@ -7,6 +7,7 @@ import { ApiError } from "../utils/ApiError";
 import { generateCouponCode } from "../utils/generateCouponCode";
 import { generateReferralCode } from "../utils/generateReferralCode";
 import { generateUniqueSlug } from "../utils/generateSlug";
+import { getTemplate, transporter } from "../lib/nodemailer";
 
 export const registerUserService = async (
     body: Pick<User, 'name' | 'email' | 'password'>, referralCode?: string
@@ -171,3 +172,24 @@ export const organizerSessionLoginService = async (id: string) => {
 
     return { status: "success", message: "Organizer found" }
 }
+
+export const userResetPasswordService = async (email: string) => {
+    if (!email) throw new ApiError(400, "Email is required");
+
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) throw new ApiError(404, "User not found");
+
+    const resetToken = generateToken({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
+
+    const resetTemplateHTML = getTemplate(resetToken, "resetPassword", user.name);
+
+    await transporter.sendMail({
+        sender: "NostraTix <nostratix.uno>",
+        to: email,
+        subject: "Reset Password",
+        html: resetTemplateHTML,
+    })
+
+    return { message: "Reset password link has been sent to your email" };
+}
+// !LIAT GIMANA DI HR APP BANG DEFRIAN INI SI TRANSPORTER DI LAKSANAKAN

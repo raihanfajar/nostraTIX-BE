@@ -6,6 +6,7 @@ import {
     registerOrganizerService,
     registerUserService,
     sessionLoginService,
+    userResetPasswordService,
     validateReferralCodeService
 } from "../services/auth.service";
 
@@ -70,4 +71,13 @@ export const organizerSessionLoginController = async (req: Request, res: Respons
     const result = await organizerSessionLoginService(organizerId);
 
     res.status(200).send({ result });
+}
+
+export const userResetPasswordController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await userResetPasswordService(req.body.email);
+        res.status(200).send({ result });
+    } catch (error) {
+        next(error);
+    }
 }
