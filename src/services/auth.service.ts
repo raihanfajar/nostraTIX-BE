@@ -8,6 +8,7 @@ import { generateCouponCode } from "../utils/generateCouponCode";
 import { generateReferralCode } from "../utils/generateReferralCode";
 import { generateUniqueSlug } from "../utils/generateSlug";
 import { getTemplate, transporter } from "../lib/nodemailer";
+import { verifyToken } from "../middlewares/jwt.middleware";
 
 export const registerUserService = async (
     body: Pick<User, 'name' | 'email' | 'password'>, referralCode?: string
@@ -189,6 +190,8 @@ export const resetPasswordService = async (email: string, targetRole: string) =>
             subject: "Reset Password",
             html: resetTemplateHTML,
         });
+        return { status: "success", message: `Reset password link has been sent to your email [${targetRole}]`, resetToken };
+
     } else if (targetRole === "ORGANIZER") {
         const organizer = await prisma.organizer.findUnique({ where: { email } });
         if (!organizer) throw new ApiError(404, "Organizer not found");
@@ -202,8 +205,29 @@ export const resetPasswordService = async (email: string, targetRole: string) =>
             subject: "Reset Password",
             html: resetTemplateHTML,
         });
+        return { status: "success", message: `Reset password link has been sent to your email [${targetRole}]`, resetToken };
     }
 
-    return { message: `Reset password link has been sent to your email [${targetRole}]` };
 }
-// !LIAT GIMANA DI HR APP BANG DEFRIAN INI SI TRANSPORTER DI LAKSANAKAN
+
+export const resetPasswordUpdateService = async (id: string, newPassword: string, targetRole: string) => {
+    if (!newPassword) throw new ApiError(400, "New password is required");
+    if (!targetRole) throw new ApiError(400, "Target role is required");
+
+    if (targetRole === "USER") {
+        const user = await prisma.user.findUnique({ where: { id } });
+        if (!user) throw new ApiError(404, "User not found");
+
+        const hashedPassword = await hashPassword(newPassword);
+        await prisma.user.update({ where: { id }, data: { password: hashedPassword } });
+
+    } else if (targetRole === "ORGANIZER") {
+        const organizer = await prisma.organizer.findUnique({ where: { id } });
+        if (!organizer) throw new ApiError(404, "Organizer not found");
+
+        const hashedPassword = await hashPassword(newPassword);
+        await prisma.organizer.update({ where: { id }, data: { password: hashedPassword } });
+    }
+
+    return { status: "success", message: `Password has been updated [${targetRole}]` }
+}

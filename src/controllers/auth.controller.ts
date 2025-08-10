@@ -6,6 +6,7 @@ import {
     registerOrganizerService,
     registerUserService,
     resetPasswordService,
+    resetPasswordUpdateService,
     sessionLoginService,
     validateReferralCodeService
 } from "../services/auth.service";
@@ -80,4 +81,15 @@ export const resetPasswordController = async (req: Request, res: Response, next:
     } catch (error) {
         next(error);
     }
+}
+
+export const resetPasswordUpdateController = async (req: Request, res: Response, next: NextFunction) => {
+    let targetId: string = "";
+
+    if (req.body.targetRole === "USER") targetId = res.locals.payload.userId;
+    else if (req.body.targetRole === "ORGANIZER") targetId = res.locals.payload.organizerId;
+
+    const result = await resetPasswordUpdateService(targetId, req.body.newPassword, req.body.targetRole);
+
+    res.status(200).send({ result });
 }
