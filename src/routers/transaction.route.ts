@@ -47,6 +47,6 @@ transactionRouter.post(
 	createVoucherController
 );
 transactionRouter.get("/voucher", getAllVoucherControllerLiterally);
-transactionRouter.get("/ticket", getUserTicketsController);
+transactionRouter.get("/ticket", verifyToken, getUserTicketsController);
 
 export default transactionRouter;

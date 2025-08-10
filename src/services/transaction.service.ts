@@ -28,7 +28,7 @@ export const createTransactionService = async (data: ICreateTransaction) => {
 		try {
 			const ticketCategory = await tx.ticketEventCategory.update({
 				where: { id: ticketEventCategoryId, seatQuota: { gte: quantity } },
-				data: { seatQuota: { decrement: quantity } },
+				data: { seatQuota: { decrement: quantity } }, // perhitungan seat qouta 
 			});
 			initialTotalPrice = ticketCategory.price * quantity;
 			finalPrice = initialTotalPrice;

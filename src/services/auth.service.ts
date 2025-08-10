@@ -77,33 +77,19 @@ export const registerUserService = async (
 };
 
 export const loginUserService = async (body: Pick<User, 'email' | 'password'>) => {
-    // *Check user validity
-    const existingUser = await prisma.user.findUnique({ where: { email: body.email } })
-    if (!existingUser) throw new ApiError(404, "User not found");
+  const existingUser = await prisma.user.findUnique({ where: { email: body.email } });
+  if (!existingUser) throw new ApiError(404, "User not found");
 
-    // *Check password validity
-    const isPasswordValid = await comparePassword(body.password, existingUser.password);
-    if (!isPasswordValid) throw new ApiError(400, "Invalid email or password");
+  const isPasswordValid = await comparePassword(body.password, existingUser.password);
+  if (!isPasswordValid) throw new ApiError(400, "Invalid email or password");
 
-    // *Generate token
-    const payload = { userId: existingUser.id, role: existingUser.role, balancePoint: existingUser.balancePoint };
-    const accessToken = generateToken(payload, process.env.JWT_SECRET!, { expiresIn: "2h" });
+  // payload SETELAH ambil user (tanpa override)
+  const payload = { userId: existingUser.id, role: existingUser.role, balancePoint: existingUser.balancePoint };
+  const accessToken = generateToken(payload, process.env.JWT_SECRET!, { expiresIn: "2h" });
 
-    const balancePoint = await prisma.point.findMany({
-        where: {
-            userId: existingUser.id,
-            expiredDate: { gte: dayjs().toISOString() }
-        }
-    });
-    existingUser.balancePoint = (balancePoint.length) * 10000;
-
-    const { password, ...rest } = existingUser;
-
-    console.log(existingUser);
-
-    // *Return when AL IZ WEL
-    return { status: "success", message: `Welcome ${existingUser.name}`, details: { ...rest, accessToken } }
-}
+  const { password, ...rest } = existingUser;
+  return { status: "success", message: `Welcome ${existingUser.name}`, details: { ...rest, accessToken } };
+};
 
 export const registerOrganizerService = async (body: Pick<Organizer, 'name' | 'email' | 'password'>) => {
     // *Setup
