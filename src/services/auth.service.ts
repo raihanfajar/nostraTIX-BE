@@ -7,6 +7,8 @@ import { ApiError } from "../utils/ApiError";
 import { generateCouponCode } from "../utils/generateCouponCode";
 import { generateReferralCode } from "../utils/generateReferralCode";
 import { generateUniqueSlug } from "../utils/generateSlug";
+import { getTemplate, transporter } from "../lib/nodemailer";
+import { verifyToken } from "../middlewares/jwt.middleware";
 
 export const registerUserService = async (
     body: Pick<User, 'name' | 'email' | 'password'>, referralCode?: string
@@ -161,7 +163,7 @@ export const sessionLoginService = async (id: string) => {
 
     if (!findEmployeeById) throw new ApiError(404, "User not found");
 
-    return { status: "success", message: "User found", details: findEmployeeById }
+    return { status: "success", message: "User found", details: findEmployeeById };
 }
 
 export const organizerSessionLoginService = async (id: string) => {
@@ -170,4 +172,62 @@ export const organizerSessionLoginService = async (id: string) => {
     if (!findOrganizerById) throw new ApiError(404, "Organizer not found");
 
     return { status: "success", message: "Organizer found" }
+}
+
+export const resetPasswordService = async (email: string, targetRole: string) => {
+    if (!email) throw new ApiError(400, "Email is required");
+    if (!targetRole) throw new ApiError(400, "Target role is required");
+
+    if (targetRole === "USER") {
+        const user = await prisma.user.findUnique({ where: { email } });
+        if (!user) throw new ApiError(404, "User not found");
+        const resetToken = generateToken({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
+        const resetTemplateHTML = getTemplate(resetToken, "resetPassword", user.name);
+
+        await transporter.sendMail({
+            sender: "NostraTix <nostratix.uno>",
+            to: email,
+            subject: "Reset Password",
+            html: resetTemplateHTML,
+        });
+        return { status: "success", message: `Reset password link has been sent to your email [${targetRole}]`, resetToken };
+
+    } else if (targetRole === "ORGANIZER") {
+        const organizer = await prisma.organizer.findUnique({ where: { email } });
+        if (!organizer) throw new ApiError(404, "Organizer not found");
+        const resetToken = generateToken({ organizerId: organizer.id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
+
+        const resetTemplateHTML = getTemplate(resetToken, "resetPassword", organizer.name);
+
+        await transporter.sendMail({
+            sender: "NostraTix <nostratix.uno>",
+            to: email,
+            subject: "Reset Password",
+            html: resetTemplateHTML,
+        });
+        return { status: "success", message: `Reset password link has been sent to your email [${targetRole}]`, resetToken };
+    }
+
+}
+
+export const resetPasswordUpdateService = async (id: string, newPassword: string, targetRole: string) => {
+    if (!newPassword) throw new ApiError(400, "New password is required");
+    if (!targetRole) throw new ApiError(400, "Target role is required");
+
+    if (targetRole === "USER") {
+        const user = await prisma.user.findUnique({ where: { id } });
+        if (!user) throw new ApiError(404, "User not found");
+
+        const hashedPassword = await hashPassword(newPassword);
+        await prisma.user.update({ where: { id }, data: { password: hashedPassword } });
+
+    } else if (targetRole === "ORGANIZER") {
+        const organizer = await prisma.organizer.findUnique({ where: { id } });
+        if (!organizer) throw new ApiError(404, "Organizer not found");
+
+        const hashedPassword = await hashPassword(newPassword);
+        await prisma.organizer.update({ where: { id }, data: { password: hashedPassword } });
+    }
+
+    return { status: "success", message: `Password has been updated [${targetRole}]` }
 }
