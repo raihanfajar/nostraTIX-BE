@@ -1,12 +1,12 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import {
     loginOrganizerService,
     loginUserService,
     organizerSessionLoginService,
     registerOrganizerService,
     registerUserService,
+    resetPasswordService,
     sessionLoginService,
-    userResetPasswordService,
     validateReferralCodeService
 } from "../services/auth.service";
 
@@ -73,9 +73,9 @@ export const organizerSessionLoginController = async (req: Request, res: Respons
     res.status(200).send({ result });
 }
 
-export const userResetPasswordController = async (req: Request, res: Response, next: NextFunction) => {
+export const resetPasswordController = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const result = await userResetPasswordService(req.body.email);
+        const result = await resetPasswordService(req.body.email, req.body.targetRole);
         res.status(200).send({ result });
     } catch (error) {
         next(error);

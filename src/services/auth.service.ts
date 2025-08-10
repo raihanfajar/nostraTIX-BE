@@ -162,7 +162,7 @@ export const sessionLoginService = async (id: string) => {
 
     if (!findEmployeeById) throw new ApiError(404, "User not found");
 
-    return { status: "success", message: "User found", details: findEmployeeById }
+    return { status: "success", message: "User found", details: findEmployeeById };
 }
 
 export const organizerSessionLoginService = async (id: string) => {
@@ -173,23 +173,37 @@ export const organizerSessionLoginService = async (id: string) => {
     return { status: "success", message: "Organizer found" }
 }
 
-export const userResetPasswordService = async (email: string) => {
+export const resetPasswordService = async (email: string, targetRole: string) => {
     if (!email) throw new ApiError(400, "Email is required");
+    if (!targetRole) throw new ApiError(400, "Target role is required");
 
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) throw new ApiError(404, "User not found");
+    if (targetRole === "USER") {
+        const user = await prisma.user.findUnique({ where: { email } });
+        if (!user) throw new ApiError(404, "User not found");
+        const resetToken = generateToken({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
+        const resetTemplateHTML = getTemplate(resetToken, "resetPassword", user.name);
 
-    const resetToken = generateToken({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
+        await transporter.sendMail({
+            sender: "NostraTix <nostratix.uno>",
+            to: email,
+            subject: "Reset Password",
+            html: resetTemplateHTML,
+        });
+    } else if (targetRole === "ORGANIZER") {
+        const organizer = await prisma.organizer.findUnique({ where: { email } });
+        if (!organizer) throw new ApiError(404, "Organizer not found");
+        const resetToken = generateToken({ organizerId: organizer.id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
 
-    const resetTemplateHTML = getTemplate(resetToken, "resetPassword", user.name);
+        const resetTemplateHTML = getTemplate(resetToken, "resetPassword", organizer.name);
 
-    await transporter.sendMail({
-        sender: "NostraTix <nostratix.uno>",
-        to: email,
-        subject: "Reset Password",
-        html: resetTemplateHTML,
-    })
+        await transporter.sendMail({
+            sender: "NostraTix <nostratix.uno>",
+            to: email,
+            subject: "Reset Password",
+            html: resetTemplateHTML,
+        });
+    }
 
-    return { message: "Reset password link has been sent to your email" };
+    return { message: `Reset password link has been sent to your email [${targetRole}]` };
 }
 // !LIAT GIMANA DI HR APP BANG DEFRIAN INI SI TRANSPORTER DI LAKSANAKAN

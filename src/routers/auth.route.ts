@@ -1,5 +1,5 @@
 import express from "express";
-import { loginOrganizerController, loginUserController, organizerSessionLoginController, registerOrganizerController, registerUserController, sessionLoginController, userResetPasswordController, validateReferralCodeController } from "../controllers/auth.controller";
+import { loginOrganizerController, loginUserController, organizerSessionLoginController, registerOrganizerController, registerUserController, resetPasswordController, sessionLoginController, validateReferralCodeController } from "../controllers/auth.controller";
 
 const authRouter = express.Router();
 
@@ -10,6 +10,6 @@ authRouter.post("/register-organizer", registerOrganizerController);
 authRouter.post("/login-user", loginUserController);
 authRouter.post("/login-organizer", loginOrganizerController);
 authRouter.post("/validate-referral-code", validateReferralCodeController);
-authRouter.post("/reset-password-user", userResetPasswordController);
+authRouter.post("/reset-password", resetPasswordController);
 
 export default authRouter;
