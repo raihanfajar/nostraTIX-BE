@@ -206,11 +206,11 @@ export const createVoucherController = async (req: Request, res: Response) => {
 };
 
 export const getUserTicketsController = async (req: Request, res: Response) => {
-  try {
-    const userId = res.locals.payload; 
-    const tickets = await getUserTicketsService(userId);
-    return res.status(200).json(tickets);
-  } catch (error: any) {
-    return res.status(error.statusCode || 500).json({ message: error.message });
-  }
+	try {
+		const { userId } = res.locals.payload;
+		const tickets = await getUserTicketsService(userId);
+		return res.status(200).json(tickets);
+	} catch (error: any) {
+		return res.status(error.statusCode || 500).json({ message: error.message });
+	}
 };
