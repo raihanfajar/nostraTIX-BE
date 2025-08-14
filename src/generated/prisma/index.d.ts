@@ -18508,6 +18508,7 @@ export namespace Prisma {
 
   export type ReviewWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    userId_eventId?: ReviewUserIdEventIdCompoundUniqueInput
     AND?: ReviewWhereInput | ReviewWhereInput[]
     OR?: ReviewWhereInput[]
     NOT?: ReviewWhereInput | ReviewWhereInput[]
@@ -18520,7 +18521,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Review"> | Date | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     event?: XOR<EventNullableScalarRelationFilter, EventWhereInput> | null
-  }, "id">
+  }, "id" | "userId_eventId">
 
   export type ReviewOrderByWithAggregationInput = {
     id?: SortOrder
@@ -20898,6 +20899,11 @@ export namespace Prisma {
   export type EventNullableScalarRelationFilter = {
     is?: EventWhereInput | null
     isNot?: EventWhereInput | null
+  }
+
+  export type ReviewUserIdEventIdCompoundUniqueInput = {
+    userId: string
+    eventId: string
   }
 
   export type ReviewCountOrderByAggregateInput = {
