@@ -84,6 +84,8 @@ model Review {
 
   user  User   @relation(fields: [userId], references: [id])
   event Event? @relation(fields: [eventId], references: [id])
+
+  @@unique([userId, eventId])
 }
 
 model Point {
@@ -194,6 +196,7 @@ model Transaction {
   voucherCode           String?
   couponCode            String?
   paymentProof          String?
+  point                 Int
   status                Status   @default(WAITING_PAYMENT)
   quantity              Int
   totalPrice            Int      @default(0)
