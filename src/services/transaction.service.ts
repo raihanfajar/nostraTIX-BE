@@ -9,6 +9,7 @@ import { ApiError } from "../utils/ApiError";
 import { addDays, addHours } from "date-fns";
 import { cloudinaryUpload } from "../utils/cloudinary";
 import { Status } from "../generated/prisma";
+import { getTemplateTxNotification, transporter } from "../lib/nodemailer";
 
 export const createTransactionService = async (data: ICreateTransaction) => {
 	const {
@@ -181,7 +182,7 @@ export const getAllVoucherService = async (code: string) => {
 
 export const getAllVoucherServiceLiterally = async (eventId: string) => {
 	const result = prisma.voucher.findMany({
-		where: { eventId: eventId} ,
+		where: { eventId: eventId },
 	});
 
 	if (!result) throw new ApiError(404, "Coupon not found");
@@ -204,6 +205,24 @@ export const setStatusTransactionService = async (
 
 				if (!rejectedTransaction) {
 					throw new Error("Transaction not found.");
+				}
+
+				// NYARI USERNYA
+				const user = await tx.user.findUnique({
+					where: { id: rejectedTransaction.userId },
+				});
+
+				if (!user) {
+					throw new Error("User not found.");
+				}
+
+				// NYARI EVENT-NYA
+				const event = await tx.event.findUnique({
+					where: { id: rejectedTransaction.eventId },
+				});
+
+				if (!event) {
+					throw new Error("Event not found.");
 				}
 
 				// Restore seat quota
@@ -241,6 +260,15 @@ export const setStatusTransactionService = async (
 					where: { id: transactionId },
 					data: { status: "REJECTED" },
 				});
+
+				const txRejectedTemplateHtml = getTemplateTxNotification(false, user.name, rejectedTransaction.id, event.name, rejectedTransaction.totalPrice, rejectedTransaction.createdAt.toString());
+
+				await transporter.sendMail({
+					sender: "NostraTix <nostratix.uno>",
+					to: user.email,
+					subject: "Transaction Rejected",
+					html: txRejectedTemplateHtml,
+				})
 			});
 		} else {
 			await prisma.$transaction(async (tx) => {
@@ -255,6 +283,24 @@ export const setStatusTransactionService = async (
 
 				if (!transaction) {
 					throw new Error("Transaction not found.");
+				}
+
+				// NYARI USERNYA
+				const user = await tx.user.findUnique({
+					where: { id: transaction.userId },
+				});
+
+				if (!user) {
+					throw new Error("User not found.");
+				}
+
+				// NYARI EVENT-NYA
+				const event = await tx.event.findUnique({
+					where: { id: transaction.eventId },
+				});
+
+				if (!event) {
+					throw new Error("Event not found.");
 				}
 
 				// Update status jadi DONE
@@ -279,6 +325,15 @@ export const setStatusTransactionService = async (
 
 				await tx.ticket.createMany({
 					data: ticketsData,
+				});
+
+				const txApproveTemplateHtml = getTemplateTxNotification(true, user.name, transaction.id, event.name, transaction.totalPrice, transaction.createdAt.toString());
+
+				await transporter.sendMail({
+					sender: "NostraTix <nostratix.uno>",
+					to: user.email,
+					subject: "Transaction Approved",
+					html: txApproveTemplateHtml,
 				});
 			});
 		}
@@ -328,63 +383,63 @@ export const getWaitingConfirmationTransactionsService = async (
 };
 
 export const createVoucherService = async (data: IVoucherCreate) => {
-  const { code, eventId, discount, quota, maxDiscount, expiredDate, organizerId } = data;
+	const { code, eventId, discount, quota, maxDiscount, expiredDate, organizerId } = data;
 
-  // Pastikan eventId memang milik organizer ini
-  const event = await prisma.event.findFirst({
-    where: {
-      id: eventId,
-      organizerId: organizerId
-    }
-  });
+	// Pastikan eventId memang milik organizer ini
+	const event = await prisma.event.findFirst({
+		where: {
+			id: eventId,
+			organizerId: organizerId
+		}
+	});
 
-  if (!event) {
-    throw new Error("Event not found or not owned by you.");
-  }
+	if (!event) {
+		throw new Error("Event not found or not owned by you.");
+	}
 
-  // Cek apakah voucher code sudah ada
-  const existingVoucher = await prisma.voucher.findUnique({
-    where: { code }
-  });
+	// Cek apakah voucher code sudah ada
+	const existingVoucher = await prisma.voucher.findUnique({
+		where: { code }
+	});
 
-  if (existingVoucher) {
-    throw new Error("Voucher code already exists.");
-  }
+	if (existingVoucher) {
+		throw new Error("Voucher code already exists.");
+	}
 
-  // Simpan voucher
-  const voucher = await prisma.voucher.create({
-    data: {
-      code,
-      eventId,
-      discount,
-      quota,
-      maxDiscount,
-      expiredDate
-    }
-  });
+	// Simpan voucher
+	const voucher = await prisma.voucher.create({
+		data: {
+			code,
+			eventId,
+			discount,
+			quota,
+			maxDiscount,
+			expiredDate
+		}
+	});
 
-  return voucher;
+	return voucher;
 };
 
 export const getUserTicketsService = async (userId: string) => {
-  return prisma.ticket.findMany({
-    where: {
-      transaction: {
-        userId,
-      },
-    },
-    include: {
-      event: true,
-      category: true,
-      transaction: {
-        select: {
-          status: true,
-          quantity: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+	return prisma.ticket.findMany({
+		where: {
+			transaction: {
+				userId,
+			},
+		},
+		include: {
+			event: true,
+			category: true,
+			transaction: {
+				select: {
+					status: true,
+					quantity: true,
+				},
+			},
+		},
+		orderBy: {
+			createdAt: "desc",
+		},
+	});
 };

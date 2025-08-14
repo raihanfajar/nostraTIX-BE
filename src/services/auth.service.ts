@@ -3,12 +3,11 @@ import prisma from "../config";
 import { Organizer, User } from "../generated/prisma";
 import { comparePassword, hashPassword } from "../lib/bcrypt";
 import { generateToken } from "../lib/jwt";
+import { getTemplateOrganizer, getTemplateUser, transporter } from "../lib/nodemailer";
 import { ApiError } from "../utils/ApiError";
 import { generateCouponCode } from "../utils/generateCouponCode";
 import { generateReferralCode } from "../utils/generateReferralCode";
 import { generateUniqueSlug } from "../utils/generateSlug";
-import { getTemplate, transporter } from "../lib/nodemailer";
-import { verifyToken } from "../middlewares/jwt.middleware";
 
 export const registerUserService = async (
     body: Pick<User, 'name' | 'email' | 'password'>, referralCode?: string
@@ -77,18 +76,18 @@ export const registerUserService = async (
 };
 
 export const loginUserService = async (body: Pick<User, 'email' | 'password'>) => {
-  const existingUser = await prisma.user.findUnique({ where: { email: body.email } });
-  if (!existingUser) throw new ApiError(404, "User not found");
+    const existingUser = await prisma.user.findUnique({ where: { email: body.email } });
+    if (!existingUser) throw new ApiError(404, "User not found");
 
-  const isPasswordValid = await comparePassword(body.password, existingUser.password);
-  if (!isPasswordValid) throw new ApiError(400, "Invalid email or password");
+    const isPasswordValid = await comparePassword(body.password, existingUser.password);
+    if (!isPasswordValid) throw new ApiError(400, "Invalid email or password");
 
-  // payload SETELAH ambil user (tanpa override)
-  const payload = { userId: existingUser.id, role: existingUser.role, balancePoint: existingUser.balancePoint };
-  const accessToken = generateToken(payload, process.env.JWT_SECRET!, { expiresIn: "2h" });
+    // payload SETELAH ambil user (tanpa override)
+    const payload = { userId: existingUser.id, role: existingUser.role, balancePoint: existingUser.balancePoint };
+    const accessToken = generateToken(payload, process.env.JWT_SECRET!, { expiresIn: "2h" });
 
-  const { password, ...rest } = existingUser;
-  return { status: "success", message: `Welcome ${existingUser.name}`, details: { ...rest, accessToken } };
+    const { password, ...rest } = existingUser;
+    return { status: "success", message: `Welcome ${existingUser.name}`, details: { ...rest, accessToken } };
 };
 
 export const registerOrganizerService = async (body: Pick<Organizer, 'name' | 'email' | 'password'>) => {
@@ -168,7 +167,7 @@ export const resetPasswordService = async (email: string, targetRole: string) =>
         const user = await prisma.user.findUnique({ where: { email } });
         if (!user) throw new ApiError(404, "User not found");
         const resetToken = generateToken({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
-        const resetTemplateHTML = getTemplate(resetToken, "resetPassword", user.name);
+        const resetTemplateHTML = getTemplateUser(resetToken, "resetPassword", user.name);
 
         await transporter.sendMail({
             sender: "NostraTix <nostratix.uno>",
@@ -183,7 +182,7 @@ export const resetPasswordService = async (email: string, targetRole: string) =>
         if (!organizer) throw new ApiError(404, "Organizer not found");
         const resetToken = generateToken({ organizerId: organizer.id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
 
-        const resetTemplateHTML = getTemplate(resetToken, "resetPassword", organizer.name);
+        const resetTemplateHTML = getTemplateOrganizer(resetToken, "resetPassword", organizer.name);
 
         await transporter.sendMail({
             sender: "NostraTix <nostratix.uno>",
