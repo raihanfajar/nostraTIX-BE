@@ -5,6 +5,7 @@ import locationRouter from "./location.route";
 import organizerRouter from "./organizer.route";
 import userRouter from "./user.route";
 import transactionRouter from "./transaction.route";
+import reviewRouter from "./review.route";
 
 const mainRouter = express.Router();
 
@@ -14,5 +15,6 @@ mainRouter.use("/location", locationRouter);
 mainRouter.use("/organizer", organizerRouter);
 mainRouter.use("/transaction", transactionRouter);
 mainRouter.use("/user", userRouter);
+mainRouter.use("/reviews", reviewRouter);
 
 export default mainRouter;
