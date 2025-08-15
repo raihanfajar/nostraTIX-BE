@@ -30,6 +30,7 @@ app.use(express.json());
 
 // health check
 app.get("/health", (_req, res) => res.json({ ok: true }));
+app.get("/", (_req, res) => res.json({ message: "API is alive" }));
 
 // routes utama
 app.use(mainRouter);
