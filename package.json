@@ -10,14 +10,14 @@
     ]
   },
   "scripts": {
-    "dev": "nodemon",
-    "build": "prisma generate && tsc",
-    "start": "node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install",
-    "migrate:dev": "dotenv -e .env.development -- npx prisma migrate dev",
     "postinstall": "prisma generate",
-    "postdeploy": "prisma migrate deploy && prisma db seed"
+    "postdeploy": "prisma migrate deploy && prisma db seed",
+    "build": "tsc && node scripts/copy-prisma.js",
+    "start": "node dist/index.js",
+    "dev": "nodemon",
+    "migrate:dev": "dotenv -e .env.development -- npx prisma migrate dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
