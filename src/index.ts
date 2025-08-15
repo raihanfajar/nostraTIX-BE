@@ -18,9 +18,6 @@ app.use(express.json());
 // health check
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
-// job scheduler (opsional, pastikan idempotent)
-expiryTransactionSchedule?.();
-
 // routes utama
 app.use(mainRouter);
 
@@ -29,5 +26,15 @@ app.use(ApiErrorHandler);
 
 // penting: bind 0.0.0.0 untuk platform hosting
 app.listen(Number(PORT), "0.0.0.0", () => {
-	console.log(`➜ API running on port ${PORT}`);
+  console.log(`➜ API running on port ${PORT}`);
+
+  // Jalankan scheduler SETELAH server hidup
+  try {
+    if (process.env.ENABLE_JOBS !== "false") {
+      expiryTransactionSchedule?.(); // pastikan fungsi ini idempotent
+      console.log("✓ scheduler started");
+    }
+  } catch (err) {
+    console.error("scheduler failed to start:", err);
+  }
 });
