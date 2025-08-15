@@ -29,6 +29,8 @@ app.use(mainRouter);
 // ERROR HANDLER HARUS PALING AKHIR
 app.use(ApiErrorHandler);
 
+
+console.log("DATABASE_URL present?", !!process.env.DATABASE_URL);
 // penting: bind 0.0.0.0 untuk platform hosting
 app.listen(Number(PORT), "0.0.0.0", () => {
   console.log(`➜ API running on port ${PORT}`);
