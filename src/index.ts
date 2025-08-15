@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from "express";
 import cors from "cors";
 import mainRouter from "./routers/index.route";
@@ -7,12 +8,16 @@ import { expiryTransactionSchedule } from "./jobs/cornJobs"; // kalau memang per
 const PORT = process.env.PORT || 8000;
 const app = express();
 
-app.use(
-	cors({
-		origin: process.env.CORS_ORIGIN?.split(",") || "*",
-		credentials: true,
-	})
-);
+const allowList = (process.env.CORS_ORIGIN ?? "")
+  .split(",")
+  .map(s => s.trim())
+  .filter(Boolean);
+
+app.use(cors({
+  origin: allowList.length ? allowList : true, // kalau kosong, reflect origin (valid utk credentials)
+  credentials: true,
+}));
+
 app.use(express.json());
 
 // health check
