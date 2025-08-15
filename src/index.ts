@@ -1,14 +1,12 @@
-// import 'dotenv/config';
+// // import 'dotenv/config';
 
-// LANGKAH 1: Lakukan tes diagnostik di baris paling pertama
-console.log("DIAGNOSTIC LOG AT TOP:", process.env.DATABASE_URL);
+// // LANGKAH 1: Lakukan tes diagnostik di baris paling pertama
+// console.log("DIAGNOSTIC LOG AT TOP:", process.env.DATABASE_URL);
 
-// LANGKAH 2: Hanya jalankan dotenv di lingkungan development
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
-
-
+// // LANGKAH 2: Hanya jalankan dotenv di lingkungan development
+// if (process.env.NODE_ENV !== 'production') {
+//   require('dotenv').config();
+// }
 import express from "express";
 import cors from "cors";
 import mainRouter from "./routers/index.route";
